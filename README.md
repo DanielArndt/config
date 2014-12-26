@@ -1,14 +1,14 @@
 Installation
 ------------
 
-First, install git.
+First, install git if it isn't already installed.
 
     sudo apt-get install git
 
 Then, clone the repository into your home directory.
 
     cd
-    git clone git@peculiar.arndt.ca:darndt/config.git
+    git clone https://peculiar.arndt.ca/darndt/config.git
 
 Finally, run the installation script.
 
