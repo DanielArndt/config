@@ -1,5 +1,5 @@
 # Install zsh
-sudo apt-get install git zsh
+sudo apt-get install zsh
 
 # Clone the antigen repo, a zsh plugin manager
 git clone https://github.com/zsh-users/antigen.git ~/config/zsh/antigen
