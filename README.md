@@ -1,7 +1,7 @@
 Installation
 ------------
 
-* Run the following
+Run the following
 
     ./config/install.sh 
 
