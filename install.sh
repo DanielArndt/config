@@ -37,5 +37,5 @@ if ask "Would you like to switch default editors?"; then
 fi
 
 if ask "Would you like to install zsh?"; then
-    exec ~/config/zsh/installZsh.sh
+    exec ~/config/zsh/install.sh
 fi
