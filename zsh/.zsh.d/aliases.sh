@@ -66,3 +66,4 @@ if hash git 2>/dev/null; then
 fi
 
 alias ll='ls -alh --color=auto'
+alias lr='ls -lh --color=auto'
