@@ -82,3 +82,4 @@ backup() {
     cp -R --backup=numbered $1 $backupLocation$i
 }
 alias bak='backup' 
+alias syncssh='rsync --partial --progress --rsh=ssh'
