@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Define the 'ask' function. This makes it easy to ask yes/no questions.
 ask() {
     while true; do
  
