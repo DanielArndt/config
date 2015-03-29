@@ -67,3 +67,18 @@ fi
 
 alias ll='ls -alh --color=auto'
 alias lr='ls -lh --color=auto'
+# Replace rm with rm -i to avoid accidental removals. Add del for
+# "deleting" by moving to a temporary directry.
+alias del='mv --verbose -f --backup=numbered --target-directory /tmp/'
+alias rm='rm -i'
+backup() {
+    backupLocation="$1.bak"
+    i=''
+    while [ -e $backupLacation$i ]
+    do
+        ((i++))
+    done
+    echo "Backing up to $backupLocation$i"
+    cp -R --backup=numbered $1 $backupLocation$i
+}
+alias bak='backup' 
