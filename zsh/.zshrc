@@ -1,4 +1,13 @@
 # Dan stuff
+if [[ -z "$TMUX" ]] ;then
+    ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+    if [[ -z "$ID" ]] ;then # if not available create a new one
+        tmux new-session
+    else
+        tmux attach-session -t "$ID" # if available attach to it
+    fi
+fi
+
 source ~/config/zsh/antigen/antigen.zsh
 source ~/config/zsh/.antigenrc
 
@@ -45,3 +54,4 @@ done
 # Not sure why this is needed... it removes 'gnats/' from being in autocompletion
 # http://stackoverflow.com/questions/27088092/zsh-prezto-cd-tab-completion-issue
 setopt nocdablevars
+

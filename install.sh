@@ -32,11 +32,75 @@ ask() {
     done
 }
 
-# Remind user to set up a different editor
-if ask "Would you like to switch default editors?"; then
-    sudo update-alternatives --config editor
+detectOperatingSystem() {
+    local os=`uname`
+    case $os in
+        'Darwin')
+            echo "Operating system: Mac"
+            operatingSystem="MAC";;
+        'Linux')
+            echo "Operating system: Linux"
+            operatingSystem="LINUX";;
+        *)
+            echo "Operating System: Unknown"
+            operatingSystem="OTHER";;
+    esac
+}
+
+installZsh() {
+    if ask "Would you like to install zsh?"; then
+        exec ~/config/zsh/install.sh
+    fi
+}
+
+installAllLinux() {
+    echo "Installing vim"
+    sudo apt-get install vim
+    # Remind user to set up a different editor
+    if ask "Would you like to switch default editors?"; then
+        sudo update-alternatives --config editor
+    fi
+
+    installZsh
+}
+
+installAllMac() {
+    if hash brew 2>/dev/null; then
+        echo "Homebrew already installed"
+    else
+        echo "Installing homebrew for Mac."
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+    brew update
+    
+    echo "Installing vim"
+    brew install vim
+    brew install git
+    brew install wget
+
+    if hash zsh 2>/dev/null; then
+        echo "zsh already installed... skipping."
+    else
+        echo "Installing zsh"
+        installZsh
+    fi
+}
+
+#### Begin main ####
+detectOperatingSystem
+
+if [[ $operatingSystem == "OTHER" ]]; then
+    echo "Cannot detect OS. Giving up."
+    exit 1
 fi
 
-if ask "Would you like to install zsh?"; then
-    exec ~/config/zsh/install.sh
+if ! ask "Is the above information correct?" "Y"; then
+    echo "Then lets give up. This sounds difficult and I don't really know what I'm doing."
+    exit 1
 fi
+
+case $operatingSystem in
+    'LINUX' )
+        installAllLinux;;
+esac
+
