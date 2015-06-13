@@ -10,7 +10,7 @@ First, install git if it isn't already installed.
 Then, clone the repository into your home directory.
 
 _**Note:** This script assumes that the config scripts are installed in your
-home directory._
+home directory. (ie. $HOME/config)_
 
 ```bash
     cd
