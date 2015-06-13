@@ -73,21 +73,24 @@ installVim() {
             brew install vim
             ;;
     esac
+    echo "Installing vundle -- plugin manager for vim"
+    git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
     
     ln -s $installDir/vim/.vimrc $HOME/.vimrc
 }
 
 installAllMac() {
     if hash brew 2>/dev/null; then
-        echo "Homebrew already installed"
+        echo "Homebrew already installed. Skipping installation."
     else
         echo "Installing homebrew for Mac."
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
+    echo "Updating homebrew"
     brew update
     
-    installVim
     brew install git
+    installVim
     brew install wget
 
     if hash zsh 2>/dev/null; then
