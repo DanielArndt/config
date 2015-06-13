@@ -1,4 +1,5 @@
 #!/bin/bash
+installDir="$HOME/config"
 
 # Define the 'ask' function. This makes it easy to ask yes/no questions.
 ask() {
@@ -49,19 +50,31 @@ detectOperatingSystem() {
 
 installZsh() {
     if ask "Would you like to install zsh?"; then
-        exec ~/config/zsh/install.sh
+        exec $installDir/zsh/install.sh
     fi
 }
 
 installAllLinux() {
-    echo "Installing vim"
-    sudo apt-get install vim
-    # Remind user to set up a different editor
-    if ask "Would you like to switch default editors?"; then
-        sudo update-alternatives --config editor
-    fi
-
+    installVim
     installZsh
+}
+
+installVim() {
+    echo "Installing vim"
+    case $operatingSystem in
+        'LINUX' )
+            sudo apt-get install vim
+            # Remind user to set up a different editor
+            if ask "Would you like to switch default editors?"; then
+                sudo update-alternatives --config editor
+            fi
+            ;;
+        'MAC')
+            brew install vim
+            ;;
+    esac
+    
+    ln -s $installDir/vim/.vimrc $HOME/.vimrc
 }
 
 installAllMac() {
@@ -73,8 +86,7 @@ installAllMac() {
     fi
     brew update
     
-    echo "Installing vim"
-    brew install vim
+    installVim
     brew install git
     brew install wget
 
@@ -99,8 +111,14 @@ if ! ask "Is the above information correct?" "Y"; then
     exit 1
 fi
 
+if ! ask "Are the config files located at <$installDir>?" "Y"; then
+    echo "Currenty, the files must be located in your home directory."
+fi
+
 case $operatingSystem in
     'LINUX' )
         installAllLinux;;
+    'MAC' )
+        installAllMac;;
 esac
 
