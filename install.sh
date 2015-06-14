@@ -73,6 +73,8 @@ installVim() {
             brew install vim
             ;;
     esac
+    # Setting default git editor to vim.
+    git config --global core.editor $(which vim)
     echo "Installing vundle -- plugin manager for vim"
     git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
     
