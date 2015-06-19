@@ -1,6 +1,6 @@
 # Dan stuff
 
-exit() {
+detachAndExit() {
     if [[ -z $TMUX ]]; then
         builtin exit
     else
@@ -8,15 +8,23 @@ exit() {
     fi
 }
 
-if [[ -z "$TMUX" ]] ;then
-    ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
-    if [[ -z "$ID" ]] ;then # if not available create a new one
-        tmux new-session
-    else
-        tmux attach-session -t "$ID" # if available attach to it
+if hash tmux 2>/dev/null; then
+    # Tmux is installed, so lets override some things.
+    alias exit=detachAndExit
+    # Alway re-attach to the previous session
+    if [[ -z "$TMUX" ]] ;then
+        ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+        if [[ -z "$ID" ]] ;then # if not available create a new one
+            tmux new-session
+        else
+            tmux attach-session -t "$ID" # if available attach to it
+        fi
+        # When we finally leave the session, just exit.
+        builtin exit
     fi
-    builtin exit
 fi
+
+# End Dan stuff
 
 source ~/config/zsh/antigen/antigen.zsh
 source ~/config/zsh/.antigenrc
