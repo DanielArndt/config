@@ -54,6 +54,11 @@ installZsh() {
     fi
 }
 
+installTmux(){
+    sudo apt-get install tmux
+    ln -s tmux/.tmux.conf $HOME/.tmux.conf
+}
+
 installAllLinux() {
     installVim
     installZsh
