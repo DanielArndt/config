@@ -56,7 +56,7 @@ installZsh() {
 
 installTmux(){
     sudo apt-get install tmux
-    ln -s tmux/.tmux.conf $HOME/.tmux.conf
+    ln -s $installDir/tmux/.tmux.conf $HOME/.tmux.conf
 }
 
 installAllLinux() {
