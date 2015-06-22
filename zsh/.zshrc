@@ -10,7 +10,7 @@ detachAndExit() {
 
 if hash tmux 2>/dev/null; then
     # Tmux is installed, so lets override some things.
-    alias exit=detachAndExit
+    alias logout=detachAndExit
     # Alway re-attach to the previous session
     if [[ -z "$TMUX" ]] ;then
         ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
