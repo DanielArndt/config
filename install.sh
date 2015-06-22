@@ -59,11 +59,6 @@ installTmux(){
     ln -s $installDir/tmux/.tmux.conf $HOME/.tmux.conf
 }
 
-installAllLinux() {
-    installVim
-    installZsh
-}
-
 installVim() {
     echo "Installing vim"
     case $operatingSystem in
@@ -84,6 +79,12 @@ installVim() {
     git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
     
     ln -s $installDir/vim/.vimrc $HOME/.vimrc
+}
+
+installAllLinux() {
+    installVim
+    installZsh
+    installTmux
 }
 
 installAllMac() {
