@@ -13,7 +13,8 @@ if hash tmux 2>/dev/null; then
     alias logout=detachAndExit
     # Alway re-attach to the previous session
     if [[ -z "$TMUX" ]] ;then
-        ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+        ID="`tmux ls | cut -d: -f1`" # get the id of a deattached session
+        #ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
         if [[ -z "$ID" ]] ;then # if not available create a new one
             tmux new-session
         else
@@ -23,6 +24,8 @@ if hash tmux 2>/dev/null; then
         builtin exit
     fi
 fi
+
+export PATH=$PATH:/usr/local/go/bin
 
 # End Dan stuff
 
