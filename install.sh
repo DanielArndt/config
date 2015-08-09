@@ -56,7 +56,19 @@ installZsh() {
 
 installTmux(){
     sudo apt-get install tmux
-    ln -s $installDir/tmux/.tmux.conf $HOME/.tmux.conf
+    ln -i -s $installDir/tmux/.tmux.conf $HOME/.tmux.conf
+}
+
+
+setupLocaleDebian(){
+    if ask "Would you like to configure locales for Debian?"; then
+        echo "Setting up locales for Debian"
+        sudo dpkg-reconfigure locales
+    fi
+}
+
+setupLinux(){
+    setupLocaleDebian
 }
 
 installVim() {
@@ -78,10 +90,11 @@ installVim() {
     echo "Installing vundle -- plugin manager for vim"
     git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
     
-    ln -s $installDir/vim/.vimrc $HOME/.vimrc
+    ln -i -s $installDir/vim/.vimrc $HOME/.vimrc
 }
 
 installAllLinux() {
+    setupLinux
     installVim
     installZsh
     installTmux
