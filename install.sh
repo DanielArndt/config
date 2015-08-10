@@ -80,6 +80,8 @@ installVim() {
             if ask "Would you like to switch default editors?"; then
                 sudo update-alternatives --config editor
             fi
+            mkdir -p $HOME/.vim
+            ln -i -s $HOME/config/vim/.vim/after $HOME/.vim/after
             ;;
         'MAC')
             brew install vim

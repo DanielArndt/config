@@ -25,7 +25,8 @@ if hash tmux 2>/dev/null; then
     fi
 fi
 
-export PATH=$PATH:/usr/local/go/bin
+export GOPATH=$HOME/go
+export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
 # End Dan stuff
 
