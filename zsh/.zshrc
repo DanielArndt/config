@@ -8,6 +8,8 @@ detachAndExit() {
     fi
 }
 
+alias sgrep='grep -rnwI "$1" -e "$2" 2>/dev/null'
+
 if hash tmux 2>/dev/null; then
     # Tmux is installed, so lets override some things.
     alias logout=detachAndExit
