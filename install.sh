@@ -71,17 +71,39 @@ setupLinux(){
     setupLocaleDebian
 }
 
+installYcm() {
+    cd ~/.vim_runtime/sources_non_forked
+    git clone https://github.com/Valloric/YouCompleteMe.git
+    sudo apt-get install llvm-dev build-essential python-dev cmake libclang-dev 
+    cd ~
+    mkdir ycm_build
+    cd ycm_build
+    cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON ~/ycm_build ~/.vim_runtime/sources_non_forked/YouCompleteMe/third_party/ycmd/cpp
+    make ycm_support_libs
+}
+
+installVimPlugins() {
+    installYcm
+    git clone https://github.com/godlygeek/csapprox.git ~/.vim_runtime/sources_non_forked/csapprox
+    git clone https://github.com/majutsushi/tagbar ~/.vim_runtime/sources_non_forked/tagbar
+    git clone https://github.com/xolox/vim-misc ~/.vim_runtime/sources_non_forked/vim-misc
+    git clone https://github.com/xolox/vim-easytags.git ~/.vim_runtime/sources_non_forked/vim-easytags
+    sudo apt-get install exuberant-ctags
+    ln -s ~/config/vim/sources_forked/theme-foursee ~/.vim_runtime/sources_forked/theme-foursee
+    ln -s ~/config/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
+}
+
 installVim() {
     echo "Installing vim"
     case $operatingSystem in
         'LINUX' )
-            sudo apt-get install vim
+            sudo apt-get install vim-nox
             # Remind user to set up a different editor
             if ask "Would you like to switch default editors?"; then
                 sudo update-alternatives --config editor
             fi
-            mkdir -p $HOME/.vim
-            ln -i -s $HOME/config/vim/.vim/after $HOME/.vim/after
+            git clone https://github.com/amix/vimrc.git ~/.vim_runtime
+            installVimPlugins
             ;;
         'MAC')
             brew install vim
@@ -89,9 +111,9 @@ installVim() {
     esac
     # Setting default git editor to vim.
     git config --global core.editor $(which vim)
-    echo "Installing vundle -- plugin manager for vim"
-    git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
-    
+    #echo "Installing vundle -- plugin manager for vim"
+    #git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+    git clone https://github.com/amix/vimrc.git ~/.vim_runtime
     ln -i -s $installDir/vim/.vimrc $HOME/.vimrc
 }
 
