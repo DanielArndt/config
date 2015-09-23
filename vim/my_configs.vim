@@ -5,6 +5,10 @@ endtry
 
 " Show line numbers in tagbar
 let g:tagbar_show_linenumbers = 1
+let g:tagbar_type_julia = {
+    \ 'ctagstype' : 'julia',
+    \ 'kinds'     : ['f:function']
+    \ }
 
 " Don't let YCM autocomplete unless prompted.
 let g:ycm_auto_trigger = 0

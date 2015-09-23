@@ -91,6 +91,7 @@ installVimPlugins() {
     sudo apt-get install exuberant-ctags
     ln -s ~/config/vim/sources_forked/theme-foursee ~/.vim_runtime/sources_forked/theme-foursee
     ln -s ~/config/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
+    ln -s ~/config/vim/.ctags ~/.ctags
 }
 
 installVim() {
