@@ -65,9 +65,6 @@ autocmd VimEnter * if !argc() | NERDTree | endif
 " Locate file in hierarchy quickly
 map <leader>T :NERDTreeFind<cr>
 
-" Toogle on/off
-nmap <leader>o :NERDTreeToggle<cr>
-
 " Tagbar
 map <leader>tb :TagbarToggle<CR>
 
