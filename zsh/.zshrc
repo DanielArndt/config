@@ -1,5 +1,6 @@
 # Dan stuff
 
+export TERM=screen-256color
 detachAndExit() {
     if [[ -z $TMUX ]]; then
         builtin exit
