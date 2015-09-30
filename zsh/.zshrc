@@ -1,6 +1,11 @@
 # Dan stuff
 
+# Without this, tmux will eat the colours!
 export TERM=screen-256color
+
+# Prevent zsh from renaming my terminals
+export DISABLE_AUTO_TITLE=true
+
 detachAndExit() {
     if [[ -z $TMUX ]]; then
         builtin exit
