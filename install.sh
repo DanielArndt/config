@@ -74,6 +74,8 @@ setupLinux(){
 installYcm() {
     cd ~/.vim_runtime/sources_non_forked
     git clone https://github.com/Valloric/YouCompleteMe.git
+    cd YouCompleteMe
+    git submodule update --init --recursive
     sudo apt-get install llvm-dev build-essential python-dev cmake libclang-dev 
     cd ~
     mkdir ycm_build

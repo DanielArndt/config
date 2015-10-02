@@ -89,3 +89,4 @@ done
 # http://stackoverflow.com/questions/27088092/zsh-prezto-cd-tab-completion-issue
 setopt nocdablevars
 
+eval $(thefuck --alias)
