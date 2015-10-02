@@ -3,6 +3,9 @@ try
 catch
 endtry
 
+" Git
+au FileType gitcommit setlocal tw=72
+
 " Show line numbers in tagbar
 let g:tagbar_show_linenumbers = 1
 let g:tagbar_type_julia = {
