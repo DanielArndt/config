@@ -68,6 +68,8 @@ setupLocaleDebian(){
 }
 
 setupLinux(){
+    echo "Updating apt-get..."
+    sudo apt-get update # Make sure everything is up to date.
     setupLocaleDebian
 }
 
