@@ -81,5 +81,10 @@ backup() {
     echo "Backing up to $backupLocation$i"
     cp -R --backup=numbered $1 $backupLocation$i
 }
-alias bak='backup' 
+alias bak='backup'
 alias syncssh='rsync --partial --progress --rsh=ssh'
+
+if hash docker 2>/dev/null; then
+    alias d='docker'
+    alias di='docker images'
+fi
