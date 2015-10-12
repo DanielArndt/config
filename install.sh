@@ -122,11 +122,17 @@ installVim() {
     ln -i -s $installDir/vim/.vimrc $HOME/.vimrc
 }
 
+installTheFuck() {
+    sudo apt-get install python-pip
+    sudo pip install thefuck --upgrade
+}
+
 installAllLinux() {
     setupLinux
     installVim
     installZsh
     installTmux
+    installTheFuck
 }
 
 installAllMac() {
