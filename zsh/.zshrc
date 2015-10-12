@@ -90,3 +90,13 @@ done
 setopt nocdablevars
 
 eval $(thefuck --alias)
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PIP_VIRTUALENV_BASE=WORKON_HOME
+
+export PIP_REQUIRE_VIRTUALENV=true
+
+export SYSTEM_PIP=`which pip`
+function syspip {
+    PIP_REQUIRE_VIRTUALENV="" sudo -H $SYSTEM_PIP "$@"
+}
