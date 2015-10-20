@@ -1,5 +1,5 @@
 #!/bin/bash
-installDir="$HOME/config"
+SCRIPT_DIR=$(readlink -f $(dirname $0))
 
 # Define the 'ask' function. This makes it easy to ask yes/no questions.
 ask() {
@@ -50,13 +50,13 @@ detectOperatingSystem() {
 
 installZsh() {
     if ask "Would you like to install zsh?"; then
-        exec $installDir/zsh/install.sh
+        exec $SCRIPT_DIR/zsh/install.sh
     fi
 }
 
 installTmux(){
     sudo apt-get install tmux
-    ln -i -s $installDir/tmux/.tmux.conf $HOME/.tmux.conf
+    ln -i -s $SCRIPT_DIR/tmux/.tmux.conf $HOME/.tmux.conf
 }
 
 
@@ -93,9 +93,9 @@ installVimPlugins() {
     git clone https://github.com/xolox/vim-misc ~/.vim_runtime/sources_non_forked/vim-misc
     git clone https://github.com/xolox/vim-easytags.git ~/.vim_runtime/sources_non_forked/vim-easytags
     sudo apt-get install exuberant-ctags
-    ln -s ~/config/vim/sources_forked/theme-foursee ~/.vim_runtime/sources_forked/theme-foursee
-    ln -s ~/config/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
-    ln -s ~/config/vim/.ctags ~/.ctags
+    ln -s $SCRIPT_DIR/vim/sources_forked/theme-foursee ~/.vim_runtime/sources_forked/theme-foursee
+    ln -s $SCRIPT_DIR/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
+    ln -s $SCRIPT_DIR/vim/.ctags ~/.ctags
 }
 
 installVim() {
@@ -119,7 +119,7 @@ installVim() {
     #echo "Installing vundle -- plugin manager for vim"
     #git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
     git clone https://github.com/amix/vimrc.git ~/.vim_runtime
-    ln -i -s $installDir/vim/.vimrc $HOME/.vimrc
+    ln -i -s $SCRIPT_DIR/vim/.vimrc $HOME/.vimrc
 }
 
 installTheFuck() {
@@ -170,8 +170,10 @@ if ! ask "Is the above information correct?" "Y"; then
     exit 1
 fi
 
-if ! ask "Are the config files located at <$installDir>?" "Y"; then
-    echo "Currenty, the files must be located in your home directory."
+if ! ask "Are the config files located at <$SCRIPT_DIR>?" "Y"; then
+    echo "Sorry, there was an error detecting the location of the install files."
+    echo "Please log a defect."
+    exit 1
 fi
 
 case $operatingSystem in
