@@ -13,11 +13,6 @@ let g:tagbar_type_julia = {
     \ 'kinds'     : ['f:function']
     \ }
 
-" Don't let YCM autocomplete unless prompted.
-let g:ycm_auto_trigger = 0
-let g:ycm_key_invoke_completion = ''
-inoremap <C-@> <C-X><C-U>
-
 "------------------------------------------------------------------------------
 " Vim-go
 "------------------------------------------------------------------------------
