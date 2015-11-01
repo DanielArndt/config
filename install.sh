@@ -4,7 +4,7 @@ SCRIPT_DIR=$(readlink -f $(dirname $0))
 # Define the 'ask' function. This makes it easy to ask yes/no questions.
 ask() {
     while true; do
- 
+
         if [ "${2:-}" = "Y" ]; then
             prompt="Y/n"
             default=Y
@@ -15,21 +15,21 @@ ask() {
             prompt="y/n"
             default=
         fi
- 
+
         # Ask the question
         read -p "$1 [$prompt] " REPLY
- 
+
         # Default?
         if [ -z "$REPLY" ]; then
             REPLY=$default
         fi
- 
+
         # Check if the reply is valid
         case "$REPLY" in
             Y*|y*) return 0 ;;
             N*|n*) return 1 ;;
         esac
- 
+
     done
 }
 
@@ -74,24 +74,27 @@ setupLinux(){
 }
 
 installYcm() {
-    cd ~/.vim_runtime/sources_non_forked
-    git clone https://github.com/Valloric/YouCompleteMe.git
-    cd YouCompleteMe
-    git submodule update --init --recursive
-    sudo apt-get install llvm-dev build-essential python-dev cmake libclang-dev 
-    cd ~
-    mkdir ycm_build
-    cd ycm_build
-    cmake -G "Unix Makefiles" -DUSE_SYSTEM_LIBCLANG=ON ~/ycm_build ~/.vim_runtime/sources_non_forked/YouCompleteMe/third_party/ycmd/cpp
-    make ycm_support_libs
+    sudo apt-get install vim-youcompleteme
+    ln -s /usr/share/vim-youcompleteme \
+        ~/.vim_runtime/sources_non_forked/vim-youcompleteme
 }
+
+gitCloneIfNotExists() {
+    gitUrl=$1
+    directory=$2
+    if [ ! -d "$directory" ]; then
+        git clone $gitUrl $directory
+    fi
+}
+
 
 installVimPlugins() {
     installYcm
-    git clone https://github.com/godlygeek/csapprox.git ~/.vim_runtime/sources_non_forked/csapprox
-    git clone https://github.com/majutsushi/tagbar ~/.vim_runtime/sources_non_forked/tagbar
-    git clone https://github.com/xolox/vim-misc ~/.vim_runtime/sources_non_forked/vim-misc
-    git clone https://github.com/xolox/vim-easytags.git ~/.vim_runtime/sources_non_forked/vim-easytags
+    cd ~/.vim_runtime/sources_non_forked
+    gitCloneIfNotExists https://github.com/godlygeek/csapprox.git ~/.vim_runtime/sources_non_forked/csapprox
+    gitCloneIfNotExists https://github.com/majutsushi/tagbar ~/.vim_runtime/sources_non_forked/tagbar
+    gitCloneIfNotExists https://github.com/xolox/vim-misc ~/.vim_runtime/sources_non_forked/vim-misc
+    gitCloneIfNotExists https://github.com/xolox/vim-easytags.git ~/.vim_runtime/sources_non_forked/vim-easytags
     sudo apt-get install exuberant-ctags
     ln -s $SCRIPT_DIR/vim/sources_forked/theme-foursee ~/.vim_runtime/sources_forked/theme-foursee
     ln -s $SCRIPT_DIR/vim/my_configs.vim ~/.vim_runtime/my_configs.vim
@@ -100,6 +103,7 @@ installVimPlugins() {
 
 installVim() {
     echo "Installing vim"
+    git clone https://github.com/amix/vimrc.git ~/.vim_runtime
     case $operatingSystem in
         'LINUX' )
             sudo apt-get install vim-nox
@@ -107,7 +111,6 @@ installVim() {
             if ask "Would you like to switch default editors?"; then
                 sudo update-alternatives --config editor
             fi
-            git clone https://github.com/amix/vimrc.git ~/.vim_runtime
             installVimPlugins
             ;;
         'MAC')
@@ -116,9 +119,6 @@ installVim() {
     esac
     # Setting default git editor to vim.
     git config --global core.editor $(which vim)
-    #echo "Installing vundle -- plugin manager for vim"
-    #git clone https://github.com/gmarik/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
-    git clone https://github.com/amix/vimrc.git ~/.vim_runtime
     ln -i -s $SCRIPT_DIR/vim/.vimrc $HOME/.vimrc
 }
 
@@ -144,7 +144,7 @@ installAllMac() {
     fi
     echo "Updating homebrew"
     brew update
-    
+
     brew install git
     installVim
     brew install wget
