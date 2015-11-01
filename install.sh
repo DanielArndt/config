@@ -130,9 +130,9 @@ installTheFuck() {
 installAllLinux() {
     setupLinux
     installVim
-    installZsh
-    installTmux
     installTheFuck
+    installTmux
+    installZsh
 }
 
 installAllMac() {
