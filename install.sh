@@ -123,7 +123,7 @@ installVim() {
 }
 
 installTheFuck() {
-    sudo apt-get install python-pip
+    sudo apt-get install python-dev python-pip
     sudo pip install thefuck --upgrade
 }
 
