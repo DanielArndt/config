@@ -70,7 +70,7 @@ map <leader>tb :TagbarToggle<CR>
 
 set number
 
- " Set a couple markers
- set colorcolumn=80,120
- " Highlight current line - allows you to track cursor position more easily
- set cursorline
+" Set a couple markers
+set colorcolumn=80,120
+" Highlight current line - allows you to track cursor position more easily
+set cursorline
