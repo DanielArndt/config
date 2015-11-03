@@ -8,10 +8,28 @@ au FileType gitcommit setlocal tw=72
 
 " Show line numbers in tagbar
 let g:tagbar_show_linenumbers = 1
-let g:tagbar_type_julia = {
-    \ 'ctagstype' : 'julia',
-    \ 'kinds'     : ['f:function']
-    \ }
+
+" Show tabs
+set list
+set listchars=trail:.,tab:>.
+
+" Double enter in normal mode inserts a newline and aligns the text
+nnoremap <CR><CR> a<CR><Esc>==
+
+" Julia block-wise movement requires matchit
+runtime macros/matchit.vim
+
+let g:ycm_collect_identifiers_from_tags_files = 1
+":set tags=.git/tags;
+":let g:easytags_dynamic_files = 2
+" Local replace
+"
+" nnoremap gr gd[{V%::s/<C-R>///gc<left><left><left>
+" The above didn't work in Julia... but probably works in other languages. In
+" julia, the best we could do is use spacing to detect scopes.
+nnoremap gr gd[[V][::s/<C-R>///gc<left><left><left>
+" Global replace
+nnoremap gR gD:%s/<C-R>///gc<left><left><left>
 
 "------------------------------------------------------------------------------
 " Vim-go
