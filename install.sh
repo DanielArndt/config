@@ -60,7 +60,7 @@ installZsh() {
 }
 
 installTmuxLinux(){
-    if ! hash brew 2>/dev/null; then
+    if ! hash tmux 2>/dev/null; then
         sudo apt-get install tmux
         ln -i -s $SCRIPT_DIR/tmux/.tmux.conf $HOME/.tmux.conf
     fi
