@@ -33,6 +33,11 @@ ask() {
     done
 }
 
+log_error() {
+    echo $1
+    echo $1 >> $SCRIPT_DIR/error.log
+}
+
 detectOperatingSystem() {
     local os=`uname`
     case $os in
@@ -54,9 +59,11 @@ installZsh() {
     fi
 }
 
-installTmux(){
-    sudo apt-get install tmux
-    ln -i -s $SCRIPT_DIR/tmux/.tmux.conf $HOME/.tmux.conf
+installTmuxLinux(){
+    if ! hash brew 2>/dev/null; then
+        sudo apt-get install tmux
+        ln -i -s $SCRIPT_DIR/tmux/.tmux.conf $HOME/.tmux.conf
+    fi
 }
 
 
@@ -131,7 +138,7 @@ installAllLinux() {
     setupLinux
     installVim
     installTheFuck
-    installTmux
+    installTmuxLinux
     installZsh
 }
 
