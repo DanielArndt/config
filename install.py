@@ -2,6 +2,7 @@
 import os
 
 SCRIPT_DIR = os.getcwd()
+log_file = open(SCRIPT_DIR + "/error.log", "w")
 
 def ask(question, default=None):
     yes_answers = {'Y', 'y', 'yes'}
@@ -23,4 +24,6 @@ def ask(question, default=None):
             return default
         print("Did not recognize input: {}".format(user_input))
 
-
+def log_error(message):
+    print(message)
+    log_file.write(message + "\n")
