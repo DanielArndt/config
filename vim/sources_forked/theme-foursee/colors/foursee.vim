@@ -63,6 +63,8 @@ hi DiffDelete guibg=#444444 guifg=#99968b
 hi DiffAdd    guibg=#2A5447
 hi DiffChange guibg=#53868B
 hi DiffText   guibg=#990909 gui=none
+hi diffAdded  guifg=#00AA00
+hi diffRemoved guifg=#FF6347
 
 " Git Syntax Highlighting
 hi gitcommitSummary     guifg=#8ac6f2 gui=none
