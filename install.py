@@ -49,6 +49,12 @@ def link_file(target, source):
 
 def install_zsh():
     log_error("install_zsh not implemented..")
+    git_clone("https://github.com/zsh-users/antigen.git",
+            SCRIPT_DIR + "/zsh/antigen")
+    link_file(HOME + "/.zshrc", SCRIPT_DIR + "zsh/.zshrc")
+    call(["chsh", "-s", "/bin/zsh"])
+    if os.environ['SHELL'] == '/bin/zsh':
+        call(["zsh"])
 
 def install_tmux():
     tmux_installed = is_installed("tmux")
@@ -107,7 +113,7 @@ def install_vim():
     if ask("Would you like to switch default editors?", False):
         call(["sudo", "update-alternatives", "--config", "editor"])
     install_vim_plugins()
-    call(["git", "config", "--global core.editor", find_executable("vim")])
+    call(["git", "config", "--global", "core.editor", find_executable("vim")])
     link_file(HOME + "/.vimrc", SCRIPT_DIR + "/vim/.vimrc")
 
 def install_thefuck():
