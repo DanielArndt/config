@@ -116,7 +116,8 @@ def install_vim():
     link_file(HOME + "/.vimrc", SCRIPT_DIR + "/vim/.vimrc")
 
 def install_thefuck():
-    install_debian("python-dev python-pip")
+    install_debian("python-dev")
+    install_debian("python-pip")
     call(["sudo", "pip", "install", "thefuck", "--upgrade"])
 
 def install_all():
