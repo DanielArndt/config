@@ -5,7 +5,7 @@ from os.path import exists
 from distutils.spawn import find_executable
 from subprocess import call
 
-SCRIPT_DIR = os.getcwd()
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 LOG_FILE = open(SCRIPT_DIR + "/error.log", "w")
 HOME = os.path.expanduser('~')
 
@@ -59,7 +59,7 @@ def install_tmux():
         if not ask("Would you like to overwrite tmux config with those in" +
                 " this script?", False):
             return
-    link_file(HOME + ".tmux.conf",
+    link_file(HOME + "/.tmux.conf",
             SCRIPT_DIR + "/home/darndt/config/tmux/.tmux.conf")
 
 def setup_locale_debian():
@@ -104,8 +104,8 @@ def install_vim():
     print("Installing vim...")
     git_clone("https://github.com/amix/vimrc.git", HOME + "/.vim_runtime")
     install_debian("vim-nox")
-    if ask("Would you like to switch default editors?"):
-        call(["sudo", "update-alternatives", "--config editor"])
+    if ask("Would you like to switch default editors?", False):
+        call(["sudo", "update-alternatives", "--config", "editor"])
     install_vim_plugins()
     call(["git", "config", "--global core.editor", find_executable("vim")])
     link_file(HOME + "/.vimrc", SCRIPT_DIR + "/vim/.vimrc")
@@ -127,7 +127,8 @@ if __name__ == "__main__":
     if not ask("This script only works on Debian / Ubuntu. Would you like to " +
             "continue?", True):
         exit()
-    if not ask("Are the config files located at <{}>?", True):
+    if not ask("Are the config files located at <{}>?".format(SCRIPT_DIR),
+            True):
         print("Sorry, there was an error detecting the location of the " +
                 "install files.")
         print("Please log a defect.")
