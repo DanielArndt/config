@@ -51,7 +51,7 @@ def install_zsh():
     install_debian("zsh")
     git_clone("https://github.com/zsh-users/antigen.git",
             SCRIPT_DIR + "/zsh/antigen")
-    link_file(HOME + "/.zshrc", SCRIPT_DIR + "zsh/.zshrc")
+    link_file(HOME + "/.zshrc", SCRIPT_DIR + "/zsh/.zshrc")
     call(["chsh", "-s", "/bin/zsh"])
     if os.environ['SHELL'] == '/bin/zsh':
         call(["zsh"])
@@ -65,8 +65,7 @@ def install_tmux():
         if not ask("Would you like to overwrite tmux config with those in" +
                 " this script?", False):
             return
-    link_file(HOME + "/.tmux.conf",
-            SCRIPT_DIR + "/home/darndt/config/tmux/.tmux.conf")
+    link_file(HOME + "/.tmux.conf", SCRIPT_DIR + "/tmux/.tmux.conf")
 
 def setup_locale_debian():
     if not ask("Would you like to configure locales for Debian?", True):
@@ -79,7 +78,7 @@ def initialize_apt():
 
 def install_ycm():
     install_debian("vim-youcompleteme")
-    link_file(HOME + "~/.vim_runtime/sources_non_forked/vim-youcompleteme",
+    link_file(HOME + "/.vim_runtime/sources_non_forked/vim-youcompleteme",
             "/usr/share/vim-youcompleteme")
 
 def git_clone(git_url, target_directory):
