@@ -48,7 +48,7 @@ def link_file(target, source):
     call(["ln", interactive, symbolic, source, target])
 
 def install_zsh():
-    log_error("install_zsh not implemented..")
+    install_debian("zsh")
     git_clone("https://github.com/zsh-users/antigen.git",
             SCRIPT_DIR + "/zsh/antigen")
     link_file(HOME + "/.zshrc", SCRIPT_DIR + "zsh/.zshrc")
@@ -100,11 +100,11 @@ def install_vim_plugins():
     git_clone("https://github.com/xolox/vim-easytags.git",
             "~/.vim_runtime/sources_non_forked/vim-easytags")
     call(["sudo", "apt-get", "install", "exuberant-ctags"])
-    link_file("~/.vim_runtime/sources_forked/theme-foursee",
+    link_file(HOME + "/.vim_runtime/sources_forked/theme-foursee",
             SCRIPT_DIR + "/vim/sources_forked/theme-foursee")
-    link_file("~/.vim_runtime/my_configs.vim",
+    link_file(HOME + "/.vim_runtime/my_configs.vim",
             SCRIPT_DIR + "/vim/my_configs.vim")
-    link_file("~/.ctags", SCRIPT_DIR + "/vim/.ctags")
+    link_file(HOME + "/.ctags", SCRIPT_DIR + "/vim/.ctags")
 
 def install_vim():
     print("Installing vim...")
