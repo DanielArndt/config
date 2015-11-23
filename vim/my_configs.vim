@@ -13,6 +13,9 @@ let g:tagbar_show_linenumbers = 1
 set list
 set listchars=trail:.,tab:>.
 
+" If there are mutiple tags, ask which one the user wants to jump to
+nnoremap <C-]> g<C-]>
+
 " Double enter in normal mode inserts a newline and aligns the text
 nnoremap <CR><CR> a<CR><Esc>==
 
@@ -25,8 +28,7 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 " Local replace
 "
 " nnoremap gr gd[{V%::s/<C-R>///gc<left><left><left>
-" The above didn't work in Julia... but probably works in other languages. In
-" julia, the best we could do is use spacing to detect scopes.
+" The above didn't work in Julia... but probably works in other languages.
 nnoremap gr gd[[V][::s/<C-R>///gc<left><left><left>
 " Global replace
 nnoremap gR gD:%s/<C-R>///gc<left><left><left>
