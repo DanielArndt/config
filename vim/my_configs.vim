@@ -11,7 +11,7 @@ let g:tagbar_show_linenumbers = 1
 
 " Show tabs
 set list
-set listchars=trail:.,tab:>.
+set listchars=trail:·,tab:>·
 
 " If there are mutiple tags, ask which one the user wants to jump to
 nnoremap <C-]> g<C-]>
@@ -88,9 +88,11 @@ map <leader>T :NERDTreeFind<cr>
 " Tagbar
 map <leader>tb :TagbarToggle<CR>
 
+" Show line numbers
 set number
-
 " Set a couple markers
 set colorcolumn=80,120
 " Highlight current line - allows you to track cursor position more easily
 set cursorline
+" Automatically indent when moving to a new line
+set autoindent
