@@ -1,0 +1,15 @@
+#!/bin/bash
+protected_branch='master'
+echo "Running pre-push"
+# check each branch being pushed
+while read local_ref local_sha remote_ref remote_sha
+do
+    echo "Remote ref is $remote_ref"
+    remote_branch=$(echo $remote_ref | sed -e 's,refs/heads/\(.*\),\1,')
+    if [ $protected_branch = $remote_branch ]
+    then 
+        echo "PUSH ABORTED: You are attempting to push directly to $protected_branch. Use --no-verify to force."
+        exit 1 # push will not execute
+    fi
+done
+exit 0
