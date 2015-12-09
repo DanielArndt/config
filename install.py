@@ -131,6 +131,7 @@ def install_thefuck():
 
 def install_all():
     initialize_apt()
+    install_git()
     setup_locale_debian()
     install_vim()
     install_thefuck()
