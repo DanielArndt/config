@@ -13,17 +13,21 @@ let g:tagbar_show_linenumbers = 1
 set list
 set listchars=trail:·,tab:>·
 
+" Don't go to the buffer when using ctrlp and the buffer is already open
+" somewhere, open it in the current window
+let g:ctrlp_jump_to_buffer = 0
+
 " If there are mutiple tags, ask which one the user wants to jump to
 nnoremap <C-]> g<C-]>
 
 " Double enter in normal mode inserts a newline and aligns the text
-nnoremap <CR><CR> a<CR><Esc>==
+nnoremap <CR><CR> i<CR><Esc>==
 
 " Julia block-wise movement requires matchit
 runtime macros/matchit.vim
 
 let g:ycm_collect_identifiers_from_tags_files = 1
-":set tags=.git/tags;
+:set tags=.git/tags;
 ":let g:easytags_dynamic_files = 2
 " Local replace
 "
@@ -90,9 +94,18 @@ map <leader>tb :TagbarToggle<CR>
 
 " Show line numbers
 set number
+
 " Set a couple markers
 set colorcolumn=80,120
 " Highlight current line - allows you to track cursor position more easily
 set cursorline
 " Automatically indent when moving to a new line
 set autoindent
+
+" Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
