@@ -17,7 +17,7 @@ set listchars=trail:·,tab:>·
 nnoremap <C-]> g<C-]>
 
 " Double enter in normal mode inserts a newline and aligns the text
-nnoremap <CR><CR> a<CR><Esc>==
+nnoremap <CR><CR> i<CR><Esc>==
 
 " Julia block-wise movement requires matchit
 runtime macros/matchit.vim
