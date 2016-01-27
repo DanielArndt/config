@@ -13,6 +13,10 @@ let g:tagbar_show_linenumbers = 1
 set list
 set listchars=trail:·,tab:>·
 
+" Don't go to the buffer when using ctrlp and the buffer is already open
+" somewhere, open it in the current window
+let g:ctrlp_jump_to_buffer = 0
+
 " If there are mutiple tags, ask which one the user wants to jump to
 nnoremap <C-]> g<C-]>
 
