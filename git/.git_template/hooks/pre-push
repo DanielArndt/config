@@ -1,14 +1,18 @@
 #!/bin/bash
-protected_branch='master'
-echo "Running pre-push"
+contains_element () {
+  local e
+  for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
+  return 1
+}
+
+protected_branches=("master" "develop")
 # check each branch being pushed
 while read local_ref local_sha remote_ref remote_sha
 do
-    echo "Remote ref is $remote_ref"
-    remote_branch=$(echo $remote_ref | sed -e 's,refs/heads/\(.*\),\1,')
-    if [ $protected_branch = $remote_branch ]
-    then 
-        echo "PUSH ABORTED: You are attempting to push directly to $protected_branch. Use --no-verify to force."
+    remote_branch=$(sed -e 's,refs/heads/\(.*\),\1,' <<< $remote_ref)
+    if contains_element $remote_branch ${protected_branches[@]} ;
+    then
+        echo "PUSH ABORTED: You are attempting to push directly to protected branch $remote_branch. Use --no-verify to force."
         exit 1 # push will not execute
     fi
 done
