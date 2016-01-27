@@ -94,9 +94,18 @@ map <leader>tb :TagbarToggle<CR>
 
 " Show line numbers
 set number
+
 " Set a couple markers
 set colorcolumn=80,120
 " Highlight current line - allows you to track cursor position more easily
 set cursorline
 " Automatically indent when moving to a new line
 set autoindent
+
+" Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
