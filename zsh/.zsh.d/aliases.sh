@@ -32,7 +32,7 @@ if hash git 2>/dev/null; then
         alias g="git"
     fi
 
-    alias gb="git b"
+    alias gb="git branch"
 
     alias gd="git diff"
 
@@ -88,3 +88,18 @@ if hash docker 2>/dev/null; then
     alias d='docker'
     alias di='docker images'
 fi
+
+if hash docker-compose 2>/dev/null; then
+    alias dcom='docker-compose'
+fi
+
+if hash tmux 2>/dev/null; then
+    function ta() {
+        if [[ -n $TMUX ]]; then
+            tmux switchc -t $1
+        else
+            tmux attach -t $1
+        fi
+    }
+fi
+
