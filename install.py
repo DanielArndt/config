@@ -5,9 +5,12 @@ from os.path import exists
 from distutils.spawn import find_executable
 from subprocess import call
 
-SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-LOG_FILE = open(SCRIPT_DIR + "/error.log", "w")
 HOME = os.path.expanduser('~')
+try:
+    SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+except:
+    SCRIPT_DIR = HOME + "/config/"
+LOG_FILE = open(SCRIPT_DIR + "/error.log", "w")
 
 def ask(question, default=None):
     yes_answers = {'Y', 'y', 'yes'}
@@ -55,6 +58,12 @@ def install_zsh():
     call(["chsh", "-s", "/bin/zsh"])
     if os.environ['SHELL'] == '/bin/zsh':
         call(["zsh"])
+
+def install_git():
+    call(["mkdir", "-p", HOME + "/.git_template/hooks"])
+    link_file(HOME + "/.git_template/hooks/pre-push",
+            SCRIPT_DIR + "/git/.git_template/hooks/pre-push")
+    call(["git", "config", "--global", "init.templatedir", "~/.git_template"])
 
 def install_tmux():
     tmux_installed = is_installed("tmux")
@@ -122,6 +131,7 @@ def install_thefuck():
 
 def install_all():
     initialize_apt()
+    install_git()
     setup_locale_debian()
     install_vim()
     install_thefuck()
