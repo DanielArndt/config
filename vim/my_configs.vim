@@ -17,6 +17,21 @@ set listchars=trail:·,tab:>·
 " somewhere, open it in the current window
 let g:ctrlp_jump_to_buffer = 0
 
+" Kill buffers in Ctrl-P with Ctrl-@
+" https://github.com/kien/ctrlp.vim/issues/280
+let g:ctrlp_buffer_func = { 'enter': 'CtrlPEnter' }
+func! CtrlPEnter()
+  nnoremap <buffer> <silent> <C-@> :call <sid>CtrlPDeleteBuffer()<cr>
+endfunc
+func! s:CtrlPDeleteBuffer()
+  let line = getline('.')
+  let bufid = line =~ '\[\d\+\*No Name\]$' ?
+    \ str2nr(matchstr(line, '\d\+')) :
+    \ fnamemodify(line[2:], ':p')
+  exec "bd" bufid
+  exec "norm \<F5>"
+endfunc
+
 " If there are mutiple tags, ask which one the user wants to jump to
 nnoremap <C-]> g<C-]>
 
