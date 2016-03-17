@@ -104,6 +104,9 @@ autocmd VimEnter * if !argc() | NERDTree | endif
 " Locate file in hierarchy quickly
 map <leader>T :NERDTreeFind<cr>
 
+" Close NERDTree after opening a file
+let NERDTreeQuitOnOpen=1
+
 " Tagbar
 map <leader>tb :TagbarToggle<CR>
 
