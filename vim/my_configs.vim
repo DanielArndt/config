@@ -127,3 +127,48 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+set ttymouse=sgr
+
+" Allow C-a increment in visual mode... just increase each number.
+function! Incr()
+  let a = line('.') - line("'<")
+  let c = virtcol("'<")
+  execute 'normal! '.c.'|'."\<C-a>"
+  normal `<
+endfunction
+vnoremap <C-a> :call Incr()<CR>
+function! Decr()
+  let c = virtcol("'<")
+  execute 'normal! '.c.'|'."\<C-x>"
+  normal `<
+endfunction
+vnoremap <C-x> :call Decr()<CR>
+
+" Only be case sensitive when typing a search manually.
+set smartcase
+
+" New splits appear to the right, and below
+set splitbelow
+set splitright
+
+" Keep backups, but keep them out of my way!
+set backup
+set backupdir=~/.vim_runtime/backup
+
+" I don't ever use ex mode, get out of my way!
+nnoremap Q <nop>
+
+" Toggle paste mode with F2
+set pastetoggle=<F2>
+
+" Stop vimpager from FREAKING out
+if exists("vimpager")
+    map j j
+    map k k
+    map z z
+endif
+
+" CtrlP tags browsing
+let g:ctrlp_extensions = ['tag']
+map ,u :CtrlPTag<CR>
