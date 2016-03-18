@@ -95,10 +95,15 @@ fi
 
 if hash tmux 2>/dev/null; then
     function ta() {
-        if [[ -n $TMUX ]]; then
-            tmux switchc -t $1
+        tmux start-server\; has-session -t $1 2>/dev/null
+        if [ "$?" -eq 1 ]; then
+            # Does not exist, create it
+            TMUX= tmux new-session -d -s $1 -n $1
+        fi
+        if [ -z "$TMUX" ]; then
+            tmux -u attach -t $1
         else
-            tmux attach -t $1
+            tmux -u switch-client -t $1
         fi
     }
 fi
