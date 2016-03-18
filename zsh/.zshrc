@@ -100,3 +100,8 @@ export SYSTEM_PIP=`which pip`
 function syspip {
     PIP_REQUIRE_VIRTUALENV="" sudo -H $SYSTEM_PIP "$@"
 }
+export EDITOR="vim"
+
+# Don't let my freeze the terminal. It's annoying and I'm fairly certain never useful these days.
+stty -ixon
+
