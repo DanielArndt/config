@@ -163,10 +163,11 @@ nnoremap Q <nop>
 set pastetoggle=<F2>
 
 " Stop vimpager from FREAKING out
-if exists("vimpager")
-    map j j
-    map k k
-    map z z
+if exists("g:vimpager.enabled")
+    let g:vimpager = {}
+    let g:less     = {}
+    let g:less.enabled = 0
+    map q :q<CR>
 endif
 
 " CtrlP tags browsing
