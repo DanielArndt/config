@@ -32,7 +32,7 @@ if hash git 2>/dev/null; then
         alias g="git"
     fi
 
-    alias gb="git b"
+    alias gb="git branch"
 
     alias gd="git diff"
 
@@ -88,3 +88,23 @@ if hash docker 2>/dev/null; then
     alias d='docker'
     alias di='docker images'
 fi
+
+if hash docker-compose 2>/dev/null; then
+    alias dcom='docker-compose'
+fi
+
+if hash tmux 2>/dev/null; then
+    function ta() {
+        tmux start-server\; has-session -t $1 2>/dev/null
+        if [ "$?" -eq 1 ]; then
+            # Does not exist, create it
+            TMUX= tmux new-session -d -s $1 -n $1
+        fi
+        if [ -z "$TMUX" ]; then
+            tmux -u attach -t $1
+        else
+            tmux -u switch-client -t $1
+        fi
+    }
+fi
+

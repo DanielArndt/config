@@ -17,6 +17,21 @@ set listchars=trail:·,tab:>·
 " somewhere, open it in the current window
 let g:ctrlp_jump_to_buffer = 0
 
+" Kill buffers in Ctrl-P with Ctrl-@
+" https://github.com/kien/ctrlp.vim/issues/280
+let g:ctrlp_buffer_func = { 'enter': 'CtrlPEnter' }
+func! CtrlPEnter()
+  nnoremap <buffer> <silent> <C-@> :call <sid>CtrlPDeleteBuffer()<cr>
+endfunc
+func! s:CtrlPDeleteBuffer()
+  let line = getline('.')
+  let bufid = line =~ '\[\d\+\*No Name\]$' ?
+    \ str2nr(matchstr(line, '\d\+')) :
+    \ fnamemodify(line[2:], ':p')
+  exec "bd" bufid
+  exec "norm \<F5>"
+endfunc
+
 " If there are mutiple tags, ask which one the user wants to jump to
 nnoremap <C-]> g<C-]>
 
@@ -89,6 +104,9 @@ autocmd VimEnter * if !argc() | NERDTree | endif
 " Locate file in hierarchy quickly
 map <leader>T :NERDTreeFind<cr>
 
+" Close NERDTree after opening a file
+let NERDTreeQuitOnOpen=1
+
 " Tagbar
 map <leader>tb :TagbarToggle<CR>
 
@@ -109,3 +127,49 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+set ttymouse=sgr
+
+" Allow C-a increment in visual mode... just increase each number.
+function! Incr()
+  let a = line('.') - line("'<")
+  let c = virtcol("'<")
+  execute 'normal! '.c.'|'."\<C-a>"
+  normal `<
+endfunction
+vnoremap <C-a> :call Incr()<CR>
+function! Decr()
+  let c = virtcol("'<")
+  execute 'normal! '.c.'|'."\<C-x>"
+  normal `<
+endfunction
+vnoremap <C-x> :call Decr()<CR>
+
+" Only be case sensitive when typing a search manually.
+set smartcase
+
+" New splits appear to the right, and below
+set splitbelow
+set splitright
+
+" Keep backups, but keep them out of my way!
+set backup
+set backupdir=~/.vim_runtime/backup
+
+" I don't ever use ex mode, get out of my way!
+nnoremap Q <nop>
+
+" Toggle paste mode with F2
+set pastetoggle=<F2>
+
+" Stop vimpager from FREAKING out
+if exists("g:vimpager.enabled")
+    let g:vimpager = {}
+    let g:less     = {}
+    let g:less.enabled = 0
+    map q :q<CR>
+endif
+
+" CtrlP tags browsing
+let g:ctrlp_extensions = ['tag']
+map ,u :CtrlPTag<CR>

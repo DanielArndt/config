@@ -45,9 +45,9 @@ export HOSTNAME=$(hostname)
 source ~/config/zsh/antigen/antigen.zsh
 source ~/config/zsh/.antigenrc
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
-SAVEHIST=1000
+# Keep 10000 lines of history within the shell and save it to ~/.zsh_history:
+HISTSIZE=10000
+SAVEHIST=10000
 HISTFILE=~/.zsh_history
 
 # Use modern completion system
@@ -100,3 +100,8 @@ export SYSTEM_PIP=`which pip`
 function syspip {
     PIP_REQUIRE_VIRTUALENV="" sudo -H $SYSTEM_PIP "$@"
 }
+export EDITOR="vim"
+
+# Don't let my freeze the terminal. It's annoying and I'm fairly certain never useful these days.
+stty -ixon
+
