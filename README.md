@@ -14,7 +14,7 @@ home directory. (ie. $HOME/config)_
 
 ```bash
     cd ~
-    git clone https://peculiar.arndt.ca/darndt/config.git
+    git clone https://github.com/DanielArndt/config.git
 ```
 
 Finally, run the installation script.
