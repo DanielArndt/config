@@ -107,6 +107,8 @@ def install_vim_plugins():
             HOME + "/.vim_runtime/sources_non_forked/vim-misc")
     git_clone("https://github.com/xolox/vim-easytags.git",
             HOME + "/.vim_runtime/sources_non_forked/vim-easytags")
+    git_clone("https://github.com/christoomey/vim-tmux-navigator",
+            HOME + "/.vim_runtime/sources_non_forked/vim-tmux-navigator")
     call(["sudo", "apt-get", "install", "exuberant-ctags"])
     link_file(HOME + "/.vim_runtime/sources_forked/theme-foursee",
             SCRIPT_DIR + "/vim/sources_forked/theme-foursee")
