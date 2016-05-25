@@ -33,17 +33,11 @@ if hash git 2>/dev/null; then
     fi
 
     alias gb="git branch"
-
     alias gd="git diff"
-
     alias gdc="git diff --cached"
-
     alias gg="git gui&"
-
     alias gl="git l"
-
     alias glp="git lp"
-
     alias gs="git status -sb"
 
     function gmod {

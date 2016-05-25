@@ -95,11 +95,8 @@ let NERDTreeWinSize = 35
 
 " Make sure that when NT root is changed, Vim's pwd is also updated
 let NERDTreeChDirMode = 2
-let NERDTreeShowLineNumbers = 1
+"let NERDTreeShowLineNumbers = 1
 let NERDTreeAutoCenter = 1
-
-" Open NERDTree on startup, when no file has been specified
-autocmd VimEnter * if !argc() | NERDTree | endif
 
 " Locate file in hierarchy quickly
 map <leader>T :NERDTreeFind<cr>
@@ -128,6 +125,7 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+" Enable mouse detection for a larger area
 set ttymouse=sgr
 
 " Allow C-a increment in visual mode... just increase each number.
