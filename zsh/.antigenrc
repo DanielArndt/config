@@ -3,13 +3,17 @@ antigen use oh-my-zsh
 # oh-my-zsh plugins
 hash git 2>/dev/null && antigen bundle git
 hash pip 2>/dev/null && antigen bundle pip
+hash go 2>/dev/null && antigen bundle golang
+hash docker 2>/dev/null && antigen bundle docker
+hash python 2>/dev/null && antigen bundle python
 hash vagrant 2>/dev/null && antigen bundle vagrant
+hash tmuxinator 2>/dev/null && antigen bundle tmuxinator
 hash virtualenvwrapper.sh 2>/dev/null && antigen bundle virtualenvwrapper
+antigen bundle zsh-users/zsh-completions src
 
 antigen bundle vi-mode
 
 # Non oh-my-zsh plugins
-#antigen bundle mdentremont/zsh-vim-mode
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-syntax-highlighting
 

@@ -1,6 +1,6 @@
 FROM debian:stable
 
-RUN apt-get update && apt-get install -y git sudo
+RUN apt-get update && apt-get install -y git sudo python
 # Add a normal user with sudo that we can test against
 RUN adduser testuser --disabled-password --gecos "" && adduser testuser sudo
 # Make sudo work without a password

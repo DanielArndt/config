@@ -8,10 +8,49 @@ au FileType gitcommit setlocal tw=72
 
 " Show line numbers in tagbar
 let g:tagbar_show_linenumbers = 1
-let g:tagbar_type_julia = {
-    \ 'ctagstype' : 'julia',
-    \ 'kinds'     : ['f:function']
-    \ }
+
+" Show tabs
+set list
+set listchars=trail:·,tab:>·
+
+" Don't go to the buffer when using ctrlp and the buffer is already open
+" somewhere, open it in the current window
+let g:ctrlp_jump_to_buffer = 0
+
+" Kill buffers in Ctrl-P with Ctrl-@
+" https://github.com/kien/ctrlp.vim/issues/280
+let g:ctrlp_buffer_func = { 'enter': 'CtrlPEnter' }
+func! CtrlPEnter()
+  nnoremap <buffer> <silent> <C-@> :call <sid>CtrlPDeleteBuffer()<cr>
+endfunc
+func! s:CtrlPDeleteBuffer()
+  let line = getline('.')
+  let bufid = line =~ '\[\d\+\*No Name\]$' ?
+    \ str2nr(matchstr(line, '\d\+')) :
+    \ fnamemodify(line[2:], ':p')
+  exec "bd" bufid
+  exec "norm \<F5>"
+endfunc
+
+" If there are mutiple tags, ask which one the user wants to jump to
+nnoremap <C-]> g<C-]>
+
+" Double enter in normal mode inserts a newline and aligns the text
+nnoremap <CR><CR> i<CR><Esc>==
+
+" Julia block-wise movement requires matchit
+runtime macros/matchit.vim
+
+let g:ycm_collect_identifiers_from_tags_files = 1
+:set tags=.git/tags;
+":let g:easytags_dynamic_files = 2
+" Local replace
+"
+" nnoremap gr gd[{V%::s/<C-R>///gc<left><left><left>
+" The above didn't work in Julia... but probably works in other languages.
+nnoremap gr gd[[V][::s/<C-R>///gc<left><left><left>
+" Global replace
+nnoremap gR gD:%s/<C-R>///gc<left><left><left>
 
 "------------------------------------------------------------------------------
 " Vim-go
@@ -56,21 +95,79 @@ let NERDTreeWinSize = 35
 
 " Make sure that when NT root is changed, Vim's pwd is also updated
 let NERDTreeChDirMode = 2
-let NERDTreeShowLineNumbers = 1
+"let NERDTreeShowLineNumbers = 1
 let NERDTreeAutoCenter = 1
-
-" Open NERDTree on startup, when no file has been specified
-autocmd VimEnter * if !argc() | NERDTree | endif
 
 " Locate file in hierarchy quickly
 map <leader>T :NERDTreeFind<cr>
 
+" Close NERDTree after opening a file
+let NERDTreeQuitOnOpen=1
+
 " Tagbar
 map <leader>tb :TagbarToggle<CR>
 
+" Show line numbers
 set number
 
- " Set a couple markers
- set colorcolumn=80,120
- " Highlight current line - allows you to track cursor position more easily
- set cursorline
+" Set a couple markers
+set colorcolumn=80,120
+" Highlight current line - allows you to track cursor position more easily
+set cursorline
+" Automatically indent when moving to a new line
+set autoindent
+
+" Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" Enable mouse detection for a larger area
+set ttymouse=sgr
+
+" Allow C-a increment in visual mode... just increase each number.
+function! Incr()
+  let a = line('.') - line("'<")
+  let c = virtcol("'<")
+  execute 'normal! '.c.'|'."\<C-a>"
+  normal `<
+endfunction
+vnoremap <C-a> :call Incr()<CR>
+function! Decr()
+  let c = virtcol("'<")
+  execute 'normal! '.c.'|'."\<C-x>"
+  normal `<
+endfunction
+vnoremap <C-x> :call Decr()<CR>
+
+" Only be case sensitive when typing a search manually.
+set smartcase
+
+" New splits appear to the right, and below
+set splitbelow
+set splitright
+
+" Keep backups, but keep them out of my way!
+set backup
+set backupdir=~/.vim_runtime/backup
+
+" I don't ever use ex mode, get out of my way!
+nnoremap Q <nop>
+
+" Toggle paste mode with F2
+set pastetoggle=<F2>
+
+" Stop vimpager from FREAKING out
+if exists("g:vimpager.enabled")
+    let g:vimpager = {}
+    let g:less     = {}
+    let g:less.enabled = 0
+    map q :q<CR>
+endif
+
+" CtrlP tags browsing
+let g:ctrlp_extensions = ['tag']
+map ,u :CtrlPTag<CR>
