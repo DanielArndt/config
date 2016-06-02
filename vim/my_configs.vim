@@ -171,3 +171,6 @@ endif
 " CtrlP tags browsing
 let g:ctrlp_extensions = ['tag']
 map ,u :CtrlPTag<CR>
+
+" Ctrl-w Ctrl-w goes to last window. Who the hell wants to cycle?
+map <C-w><C-w> <C-w><C-p>
