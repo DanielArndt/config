@@ -61,6 +61,16 @@ def install_zsh():
 
 def install_git():
     call(["mkdir", "-p", HOME + "/.git_template/hooks"])
+    link_file(HOME + "/.git_template/hooks/ctags",
+            SCRIPT_DIR + "/git/.git_template/hooks/ctags")
+    link_file(HOME + "/.git_template/hooks/post-checkout",
+            SCRIPT_DIR + "/git/.git_template/hooks/post-checkout")
+    link_file(HOME + "/.git_template/hooks/post-commit",
+            SCRIPT_DIR + "/git/.git_template/hooks/post-commit")
+    link_file(HOME + "/.git_template/hooks/post-merge",
+            SCRIPT_DIR + "/git/.git_template/hooks/post-merge")
+    link_file(HOME + "/.git_template/hooks/post-rewrite",
+            SCRIPT_DIR + "/git/.git_template/hooks/post-rewrite")
     link_file(HOME + "/.git_template/hooks/pre-push",
             SCRIPT_DIR + "/git/.git_template/hooks/pre-push")
     call(["git", "config", "--global", "init.templatedir", "~/.git_template"])
