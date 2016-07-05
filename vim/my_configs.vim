@@ -8,6 +8,8 @@ au FileType gitcommit setlocal tw=72
 
 " Show line numbers in tagbar
 let g:tagbar_show_linenumbers = 1
+" Close tagbar after selecting something
+let g:tagbar_autoclose = 1
 
 " Show tabs
 set list

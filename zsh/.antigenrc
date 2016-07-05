@@ -1,14 +1,17 @@
 antigen use oh-my-zsh
 
 # oh-my-zsh plugins
-hash git 2>/dev/null && antigen bundle git
+# TODO: Need to make this work with virtualenvs!!
 hash pip 2>/dev/null && antigen bundle pip
 hash go 2>/dev/null && antigen bundle golang
+hash git 2>/dev/null && antigen bundle git # Comes after go so that git aliases take priority
 hash docker 2>/dev/null && antigen bundle docker
+antigen bundle docker-compose # Always load, incase it is in a virtualenv
 hash python 2>/dev/null && antigen bundle python
 hash vagrant 2>/dev/null && antigen bundle vagrant
 hash tmuxinator 2>/dev/null && antigen bundle tmuxinator
 hash virtualenvwrapper.sh 2>/dev/null && antigen bundle virtualenvwrapper
+antigen bundle django # Always load, incase it is in a virtualenv
 antigen bundle zsh-users/zsh-completions src
 
 antigen bundle vi-mode

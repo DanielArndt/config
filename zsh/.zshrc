@@ -37,7 +37,7 @@ if hash tmux 2>/dev/null; then
 fi
 
 export GOPATH=$HOME/go
-export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+export PATH=$GOPATH/bin:$HOME/bin:/usr/local/go/bin:$PATH
 export HOSTNAME=$(hostname)
 
 # End Dan stuff
@@ -102,6 +102,7 @@ function syspip {
 }
 export EDITOR="vim"
 
-# Don't let my freeze the terminal. It's annoying and I'm fairly certain never useful these days.
+# Don't let my freeze the terminal with ctrl-s.
+# It's annoying and I'm fairly certain never useful these days.
 stty -ixon
 
