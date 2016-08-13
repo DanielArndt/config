@@ -162,17 +162,56 @@ nnoremap Q <nop>
 " Toggle paste mode with F2
 set pastetoggle=<F2>
 
+" Refresh
+map <F5> :checktime<CR>
+imap <F5> <C-o>:checktime<CR>
+
 " Stop vimpager from FREAKING out
 if exists("g:vimpager.enabled")
+    " Disable all the vim-less bindings. They're the worst.
     let g:vimpager = {}
     let g:less     = {}
     let g:less.enabled = 0
-    map q :q<CR>
+    " q quits, even if changed (if file is too long, truncation is a change)
+    map q :q!<CR>
+    " Set read-only, non-modifiable buffer
+    set nomodifiable
+    " Don't show trailing chars
+    highlight ExtraWhitespace none
 endif
 
 " CtrlP tags browsing
 let g:ctrlp_extensions = ['tag']
-map ,u :CtrlPTag<CR>
+noremap <leader>u :CtrlPTag<CR>
 
 " Ctrl-w Ctrl-w goes to last window. Who the hell wants to cycle?
-map <C-w><C-w> <C-w><C-p>
+noremap <C-w><C-w> <C-w><C-p>
+
+" Flake8 - Show me python errors as soon as I save
+function Flake8ifexists()
+    if executable("flake8")
+        call Flake8()
+    endif
+endfunction
+
+autocmd BufWritePost *.py call Flake8ifexists()
+let g:flake8_show_quickfix=0  " don't show
+let g:flake8_show_in_gutter=1  " show in gutter instead
+
+let g:bookmark_auto_close=1 " Auto close bookmark window
+let g:bookmark_manage_per_buffer=1
+
+
+" Re-reformat paragraph (align to text width).
+" TODO: I want C-/  but keyboard sends C-_. Is C-_ just this crazy keyboard?
+noremap <C-_> {v}gq<C-o><C-o>
+
+" Avoid weird behaviour where nerdtree opens full screen
+noremap <leader>ba :NERDTreeClose<CR>:bufdo bd<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Parenthesis/bracket/quotes
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vnoremap `` <esc>`>a``<esc>`<i``<esc>
+
+noremap <leader>q <C-w>q
