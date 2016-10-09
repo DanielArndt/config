@@ -37,11 +37,6 @@ def log_error(message):
     print(message)
     LOG_FILE.write(str(time) + ": " + message + "\n")
 
-def is_installed(program_name):
-    if find_executable(program_name):
-        return True
-    return False
-
 def install_debian(package_name):
     call(["sudo", "apt-get", "install", package_name])
 
@@ -66,7 +61,7 @@ def install_git():
     call(["git", "config", "--global", "init.templatedir", "~/.git_template"])
 
 def install_tmux():
-    tmux_installed = is_installed("tmux")
+    tmux_location = find_executable("tmux")
     if not tmux_installed:
         install_debian("tmux")
     else:
@@ -118,7 +113,8 @@ def install_vim_plugins():
 
 def install_vim():
     print("Installing vim...")
-    git_clone("https://github.com/amix/vimrc.git", HOME + "/.vim_runtime")
+    git_clone("https://github.com/DanielArndt/vim-config.git", HOME + "/.vim_runtime")
+    # TODO link .vimrc
     install_debian("vim-nox")
     if ask("Would you like to switch default editors?", False):
         call(["sudo", "update-alternatives", "--config", "editor"])

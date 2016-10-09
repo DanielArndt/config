@@ -162,10 +162,6 @@ nnoremap Q <nop>
 " Toggle paste mode with F2
 set pastetoggle=<F2>
 
-" Refresh
-map <F5> :checktime<CR>
-imap <F5> <C-o>:checktime<CR>
-
 " Stop vimpager from FREAKING out
 if exists("g:vimpager.enabled")
     " Disable all the vim-less bindings. They're the worst.
@@ -195,7 +191,7 @@ function Flake8ifexists()
 endfunction
 
 autocmd BufWritePost *.py call Flake8ifexists()
-let g:flake8_show_quickfix=0  " don't show
+let g:flake8_show_quickfix=0  " don't show in quickfix window
 let g:flake8_show_in_gutter=1  " show in gutter instead
 
 let g:bookmark_auto_close=1 " Auto close bookmark window
@@ -203,15 +199,16 @@ let g:bookmark_manage_per_buffer=1
 
 
 " Re-reformat paragraph (align to text width).
-" TODO: I want C-/  but keyboard sends C-_. Is C-_ just this crazy keyboard?
+" TODO: I want C-/  but keyboard sends C-_. Is this tmux's fault?
 noremap <C-_> {v}gq<C-o><C-o>
 
-" Avoid weird behaviour where nerdtree opens full screen
+" Avoid weird behaviour where nerdtree opens full screen, close all buffers
 noremap <leader>ba :NERDTreeClose<CR>:bufdo bd<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Parenthesis/bracket/quotes
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pressing `` wraps selection in double backticks
 vnoremap `` <esc>`>a``<esc>`<i``<esc>
 
 noremap <leader>q <C-w>q

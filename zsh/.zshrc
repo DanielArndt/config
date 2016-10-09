@@ -49,7 +49,9 @@ export EDITOR="vim"
 # It's annoying and I'm fairly certain never useful these days.
 stty -ixon
 
-source /usr/local/bin/virtualenvwrapper.sh
+if [[ -e /usr/local/bin/virtualenvwrapper.sh ]]; then
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
 
 # Vim Pager
 if hash vimpager 2>/dev/null; then
