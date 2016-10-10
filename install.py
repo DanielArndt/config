@@ -62,7 +62,7 @@ def install_git():
 
 def install_tmux():
     tmux_location = find_executable("tmux")
-    if not tmux_installed:
+    if not tmux_location:
         install_debian("tmux")
     else:
         log_error("tmux is already installed.")
