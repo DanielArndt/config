@@ -72,7 +72,7 @@ def install_tmux():
     link_file(HOME + "/.tmux.conf", SCRIPT_DIR + "/tmux/.tmux.conf")
 
 def setup_locale_debian():
-    if not ask("Would you like to configure locales for Debian?", True):
+    if not ask("Would you like to configure locales for Debian?", False):
         return
     call(["sudo", "dpkg-reconfigure", "locales"])
 
@@ -107,8 +107,6 @@ def install_vim_plugins():
     call(["sudo", "apt-get", "install", "exuberant-ctags"])
     link_file(HOME + "/.vim_runtime/sources_forked/theme-foursee",
             SCRIPT_DIR + "/vim/sources_forked/theme-foursee")
-    link_file(HOME + "/.vim_runtime/my_configs.vim",
-            SCRIPT_DIR + "/vim/my_configs.vim")
     link_file(HOME + "/.ctags", SCRIPT_DIR + "/vim/.ctags")
 
 def install_vim():
