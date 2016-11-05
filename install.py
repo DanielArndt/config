@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import os
+import shlex
+import subprocess
 from datetime import datetime
 from os.path import exists
 from distutils.spawn import find_executable
@@ -39,6 +41,9 @@ def log_error(message):
 
 def install_debian(package_name):
     call(["sudo", "apt-get", "install", package_name])
+
+def install_pip(package_name):
+    call(["sudo", "pip", "install", package_name])
 
 def link_file(target, source):
     interactive = "-i"
@@ -111,8 +116,15 @@ def install_vim_plugins():
 
 def install_vim():
     print("Installing vim...")
-    git_clone("https://github.com/DanielArndt/vim-config.git", HOME + "/.vim_runtime")
+    git_clone("https://github.com/DanielArndt/vim-config.git",
+              HOME + "/.vim_runtime")
     # TODO link .vimrc
+    cmd = shlex.split('git submodule update --init --recursive')
+    p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT,
+                         cwd=HOME + '/.vim_runtime')
+    output, _ = p.communicate()
+    print(output)
     install_debian("vim-nox")
     if ask("Would you like to switch default editors?", False):
         call(["sudo", "update-alternatives", "--config", "editor"])
@@ -124,6 +136,10 @@ def install_thefuck():
     install_debian("python-dev")
     install_debian("python-pip")
     call(["sudo", "pip", "install", "thefuck", "--upgrade"])
+
+def install_virtualenvwrapper():
+    pass
+    # pip install virtualenvwrapper # TODO: what about if pip is protected? (ie. after the .zshrc is installed)
 
 def install_all():
     initialize_apt()
