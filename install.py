@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import os
+import shlex
+import subprocess
 from datetime import datetime
 from os.path import exists
 from distutils.spawn import find_executable
@@ -37,13 +39,11 @@ def log_error(message):
     print(message)
     LOG_FILE.write(str(time) + ": " + message + "\n")
 
-def is_installed(program_name):
-    if find_executable(program_name):
-        return True
-    return False
-
 def install_debian(package_name):
     call(["sudo", "apt-get", "install", package_name])
+
+def install_pip(package_name):
+    call(["sudo", "pip", "install", package_name])
 
 def link_file(target, source):
     interactive = "-i"
@@ -76,8 +76,8 @@ def install_git():
     call(["git", "config", "--global", "init.templatedir", "~/.git_template"])
 
 def install_tmux():
-    tmux_installed = is_installed("tmux")
-    if not tmux_installed:
+    tmux_location = find_executable("tmux")
+    if not tmux_location:
         install_debian("tmux")
     else:
         log_error("tmux is already installed.")
@@ -87,7 +87,7 @@ def install_tmux():
     link_file(HOME + "/.tmux.conf", SCRIPT_DIR + "/tmux/.tmux.conf")
 
 def setup_locale_debian():
-    if not ask("Would you like to configure locales for Debian?", True):
+    if not ask("Would you like to configure locales for Debian?", False):
         return
     call(["sudo", "dpkg-reconfigure", "locales"])
 
@@ -122,13 +122,19 @@ def install_vim_plugins():
     call(["sudo", "apt-get", "install", "exuberant-ctags"])
     link_file(HOME + "/.vim_runtime/sources_forked/theme-foursee",
             SCRIPT_DIR + "/vim/sources_forked/theme-foursee")
-    link_file(HOME + "/.vim_runtime/my_configs.vim",
-            SCRIPT_DIR + "/vim/my_configs.vim")
     link_file(HOME + "/.ctags", SCRIPT_DIR + "/vim/.ctags")
 
 def install_vim():
     print("Installing vim...")
-    git_clone("https://github.com/amix/vimrc.git", HOME + "/.vim_runtime")
+    git_clone("https://github.com/DanielArndt/vim-config.git",
+              HOME + "/.vim_runtime")
+    # TODO link .vimrc
+    cmd = shlex.split('git submodule update --init --recursive')
+    p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT,
+                         cwd=HOME + '/.vim_runtime')
+    output, _ = p.communicate()
+    print(output)
     install_debian("vim-nox")
     if ask("Would you like to switch default editors?", False):
         call(["sudo", "update-alternatives", "--config", "editor"])
@@ -140,6 +146,10 @@ def install_thefuck():
     install_debian("python-dev")
     install_debian("python-pip")
     call(["sudo", "pip", "install", "thefuck", "--upgrade"])
+
+def install_virtualenvwrapper():
+    pass
+    # pip install virtualenvwrapper # TODO: what about if pip is protected? (ie. after the .zshrc is installed)
 
 def install_all():
     initialize_apt()
