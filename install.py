@@ -39,28 +39,39 @@ def log_error(message):
     print(message)
     LOG_FILE.write(str(time) + ": " + message + "\n")
 
+def shell_call(command_str, cwd=HOME):
+    cmd = shlex.split(command_str)
+    p = subprocess.Popen(cmd,
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT,
+                         cwd=cwd)
+    output, _ = p.communicate()
+    print(output)
+
 def install_debian(package_name):
-    call(["sudo", "apt-get", "install", package_name])
+    shell_call('sudo apt-get install {}'.format(package_name))
 
 def install_pip(package_name):
-    call(["sudo", "pip", "install", package_name])
+    shell_call('sudo pip install {}'.format(package_name))
 
 def link_file(target, source):
-    interactive = "-i"
-    symbolic = "-s"
-    call(["ln", interactive, symbolic, source, target])
+    interactive = '-i'
+    symbolic = '-s'
+    options = ' '.join([interactive, symbolic])
+    shell_call('ln {options} {} {}'.format(source, target, options=options))
 
 def install_zsh():
-    install_debian("zsh")
+    install_debian('zsh')
     git_clone("https://github.com/zsh-users/antigen.git",
             SCRIPT_DIR + "/zsh/antigen")
     link_file(HOME + "/.zshrc", SCRIPT_DIR + "/zsh/.zshrc")
-    call(["chsh", "-s", "/bin/zsh"])
-    if os.environ['SHELL'] == '/bin/zsh':
-        call(["zsh"])
+    shell_call('chsh -s /bin/zsh')
+    if os.environ['SHELL'] != '/bin/zsh':
+        shell_call('zsh')
 
 def install_git():
-    call(["mkdir", "-p", HOME + "/.git_template/hooks"])
+    shell_call('mkdir -p {home}/.git_template/hooks'.format(home=HOME))
     link_file(HOME + "/.git_template/hooks/ctags",
             SCRIPT_DIR + "/git/.git_template/hooks/ctags")
     link_file(HOME + "/.git_template/hooks/post-checkout",
@@ -73,7 +84,7 @@ def install_git():
             SCRIPT_DIR + "/git/.git_template/hooks/post-rewrite")
     link_file(HOME + "/.git_template/hooks/pre-push",
             SCRIPT_DIR + "/git/.git_template/hooks/pre-push")
-    call(["git", "config", "--global", "init.templatedir", "~/.git_template"])
+    shell_call('git config --global init.templatedir {home}/.git_template'.format(home=HOME))
 
 def install_tmux():
     tmux_location = find_executable("tmux")
@@ -82,18 +93,18 @@ def install_tmux():
     else:
         log_error("tmux is already installed.")
         if not ask("Would you like to overwrite tmux config with those in" +
-                " this script?", False):
+                " this script?", default=False):
             return
     link_file(HOME + "/.tmux.conf", SCRIPT_DIR + "/tmux/.tmux.conf")
 
 def setup_locale_debian():
-    if not ask("Would you like to configure locales for Debian?", False):
+    if not ask("Would you like to configure locales for Debian?", default=False):
         return
-    call(["sudo", "dpkg-reconfigure", "locales"])
+    shell_call('sudo dpkg-reconfigure locales')
 
 def initialize_apt():
     print("Updating apt-get...")
-    call(["sudo", "apt-get", "update"])
+    shell_call('sudo apt-get update')
 
 def install_ycm():
     install_debian("vim-youcompleteme")
@@ -105,7 +116,9 @@ def git_clone(git_url, target_directory):
         log_error("Error, {} already exists. Will not clone {}".format(
                 target_directory, git_url))
         return
-    call(["git", "clone", git_url, target_directory])
+    shell_call('git clone {url} {target_directory}'.format(
+        url=git_url,
+        target_directory=target_directory))
 
 def install_vim_plugins():
     install_ycm()
@@ -119,7 +132,7 @@ def install_vim_plugins():
             HOME + "/.vim_runtime/sources_non_forked/vim-easytags")
     git_clone("https://github.com/christoomey/vim-tmux-navigator",
             HOME + "/.vim_runtime/sources_non_forked/vim-tmux-navigator")
-    call(["sudo", "apt-get", "install", "exuberant-ctags"])
+    install_debian('exuberant-ctags')
     link_file(HOME + "/.vim_runtime/sources_forked/theme-foursee",
             SCRIPT_DIR + "/vim/sources_forked/theme-foursee")
     link_file(HOME + "/.ctags", SCRIPT_DIR + "/vim/.ctags")
@@ -129,23 +142,18 @@ def install_vim():
     git_clone("https://github.com/DanielArndt/vim-config.git",
               HOME + "/.vim_runtime")
     # TODO link .vimrc
-    cmd = shlex.split('git submodule update --init --recursive')
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT,
-                         cwd=HOME + '/.vim_runtime')
-    output, _ = p.communicate()
-    print(output)
+    shell_call('git submodule update --init --recursive', cwd=HOME + '/.vim_runtime/')
     install_debian("vim-nox")
-    if ask("Would you like to switch default editors?", False):
-        call(["sudo", "update-alternatives", "--config", "editor"])
+    if ask("Would you like to switch default editors?", default=False):
+        shell_call('sudo update-alternatives --config editor')
     install_vim_plugins()
-    call(["git", "config", "--global", "core.editor", find_executable("vim")])
+    shell_call('git config --global core.editor {}'.format(find_executable('vim')))
     link_file(HOME + "/.vimrc", SCRIPT_DIR + "/vim/.vimrc")
 
 def install_thefuck():
     install_debian("python-dev")
     install_debian("python-pip")
-    call(["sudo", "pip", "install", "thefuck", "--upgrade"])
+    shell_call('sudo pip install thefuck --upgrade')
 
 def install_virtualenvwrapper():
     pass
