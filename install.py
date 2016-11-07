@@ -41,13 +41,7 @@ def log_error(message):
 
 def shell_call(command_str, cwd=HOME):
     cmd = shlex.split(command_str)
-    p = subprocess.Popen(cmd,
-                         stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT,
-                         cwd=cwd)
-    output, _ = p.communicate()
-    print(output)
+    return subprocess.call(cmd, cwd=cwd)
 
 def install_debian(package_name):
     shell_call('sudo apt-get install {}'.format(package_name))
