@@ -142,8 +142,6 @@ def install_vim_plugins():
     git_clone("https://github.com/christoomey/vim-tmux-navigator",
               HOME + "/.vim_runtime/sources_non_forked/vim-tmux-navigator")
     install_debian('exuberant-ctags')
-    link_file(HOME + "/.vim_runtime/sources_forked/theme-foursee",
-              SCRIPT_DIR + "/vim/sources_forked/theme-foursee")
     link_file(HOME + "/.ctags", SCRIPT_DIR + "/vim/.ctags")
 
 
@@ -182,11 +180,11 @@ def install_all():
 if __name__ == "__main__":
     if not ask("This script only works on Debian / Ubuntu. Would you like to continue?",
                default=True):
-        exit()
+        exit(1)
     if not ask("Are the config files located at <{}>?".format(SCRIPT_DIR),
                default=True):
         print("Sorry, there was an error detecting the location of the install files.")
         print("Please log a defect.")
-        exit()
+        exit(1)
 
 install_all()
