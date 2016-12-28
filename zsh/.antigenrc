@@ -29,10 +29,5 @@ then
     fi
 fi
 
-# Install ringwood theme. Don't verify the SSL cert for now.
-export GIT_SSL_NO_VERIFY=1
-antigen theme https://peculiar.arndt.ca/darndt/zsh_themes.git ringwood
-export GIT_SSL_NO_VERIFY=0
-
+antigen theme https://github.com/DanielArndt/zsh_themes.git ringwood
 antigen apply
-
