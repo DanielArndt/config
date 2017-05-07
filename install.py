@@ -115,8 +115,9 @@ def initialize_apt():
 
 def install_ycm():
     install_debian("vim-youcompleteme")
-    link_file(HOME + "/.vim_runtime/sources_non_forked/vim-youcompleteme",
-              "/usr/share/vim-youcompleteme")
+    # FIXME: Broken. See https://github.com/DanielArndt/config/issues/25
+    #link_file(HOME + "/.vim_runtime/sources_non_forked/vim-youcompleteme",
+    #          "/usr/share/vim-youcompleteme")
 
 
 def git_clone(git_url, target_directory):
