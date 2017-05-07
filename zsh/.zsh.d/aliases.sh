@@ -39,6 +39,7 @@ if hash git 2>/dev/null; then
     alias gl="git l"
     alias glp="git lp"
     alias gs="git status -sb"
+    alias gc!="git commit --amend --reset-author"
 
     function gmod {
         local _path=$(git rev-parse --show-toplevel || pwd)
@@ -63,7 +64,7 @@ alias ll='ls -alh --color=auto'
 alias lr='ls -lh --color=auto'
 # Replace rm with rm -i to avoid accidental removals. Add del for
 # "deleting" by moving to a temporary directry.
-alias del='mv --verbose -f --backup=numbered --target-directory /tmp/'
+alias del='mkdir -p /tmp/$USER && mv --verbose -f --backup=numbered --target-directory /tmp/$USER'
 alias rm='rm -i'
 backup() {
     backupLocation="$1.bak"
