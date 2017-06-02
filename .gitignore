@@ -1,1 +1,4 @@
 zsh/antigen/
+.vagrant
+*.zwc
+error.log
