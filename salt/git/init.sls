@@ -1,7 +1,8 @@
 {% set home = salt.environ.get('HOME') %}
 
 {{ home }}/.git_template/hooks:
-  file.directory
+  file.directory:
+    - makedirs: True
 
 ctags hook file:
   file.managed:
@@ -33,7 +34,7 @@ pre push file:
     - name: {{ home }}/.git_template/hooks/pre-push
     - source: salt://git/git_template/hooks/pre-push
 
-initiate template dir:
+initiate git template dir:
   git.config_set:
     - name: init.templatedir
     - value: {{ home }}/.git_template

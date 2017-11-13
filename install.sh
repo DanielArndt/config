@@ -3,4 +3,4 @@ if ! hash salt-call > /dev/null; then
     sudo sh bootstrap_salt.sh
 fi
 
-sudo salt-call --file-root=salt --local state.highstate
+sudo CONFIG_USER=$USER salt-call --file-root=salt --local state.highstate
