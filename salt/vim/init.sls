@@ -21,3 +21,8 @@ vimrc:
 install vim:
   pkg.installed:
     - name: vim
+
+vim default editor:
+  alternatives.set:
+    - name: editor
+    - path: /usr/bin/vim.basic
