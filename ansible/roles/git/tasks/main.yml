@@ -1,0 +1,26 @@
+- name: ensure github template hooks directory exists
+  file: 
+    path: "{{ git_template_directory }}/hooks" 
+    state: directory
+- name: copy git hooks templates
+  template: 
+    src: "git_template/hooks/{{ item.filename }}"
+    dest: "{{ git_template_directory }}/hooks/{{ item.filename }}"
+  with_items:
+    - { filename: "ctags" }
+    - { filename: "post-checkout" }
+    - { filename: "post-commit" }
+    - { filename: "post-merge" }
+    - { filename: "post-rewrite" }
+    - { filename: "pre-push" }
+- name: add template dir to git config
+  git_config:
+    name: init.templatedir
+    value: "{{ git_template_directory }}"
+    scope: global
+  register: git_result
+  tags: debug
+- name: debug
+  debug:
+    msg : "{{ git_result }}"
+  tags: debug

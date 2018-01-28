@@ -6,4 +6,4 @@ if ! hash ansible-playbook > /dev/null; then
 	sudo pip install ansible || { echo "Error: \`pip install ansible\`" && exit 1; }
 fi
 
-ansible-playbook -i "localhost," -c local ansible/playbook.yml 
+ansible-playbook -i "localhost," -c local ansible/master.yml 
