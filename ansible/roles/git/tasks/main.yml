@@ -19,8 +19,3 @@
     value: "{{ git_template_directory }}"
     scope: global
   register: git_result
-  tags: debug
-- name: debug
-  debug:
-    msg : "{{ git_result }}"
-  tags: debug
