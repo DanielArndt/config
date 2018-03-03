@@ -8,3 +8,6 @@ required_packages:
     - python3-pip
 
 neovim_ppa: ppa:neovim-ppa/unstable
+
+vim_runtime_dir: "{{ ansible_env.HOME }}/.vim_runtime"
+

@@ -22,3 +22,8 @@
       alternatives: name=editor path=/usr/bin/nvim
   become: true
 
+- name: Clone vim config repo
+  git:
+    repo: 'https://github.com/DanielArndt/vim-config.git'
+    dest: "{{ vim_runtime_dir }}"
+
