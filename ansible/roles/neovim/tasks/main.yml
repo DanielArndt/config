@@ -32,3 +32,33 @@
     template:
       src: "vimrc"
       dest: "{{ ansible_env.HOME }}/.vimrc"
+
+  - name: Link vimrc for neovim
+    file:
+      src: "{{ ansible_env.HOME }}/.vimrc"
+      dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
+      state: link
+
+# YouCompleteMe
+- block:
+  - name: Install YouCompleteMe dependencies
+    apt: name={{ item }} state=installed
+    become: true
+    with_items: 
+      - "{{ ycm_packages }}"
+
+  - name: Install YouCompleteMe python modules
+    pip:
+      name: neovim
+    become: true
+
+  - name: Clone YouCompleteMe
+    git:
+      repo: "https://github.com/Valloric/YouCompleteMe"
+      dest: "{{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe"
+
+  - name: Run YouCompleteMe install (this may take a while)
+    shell: "python {{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe/install.py --clang-completer"
+
+  tags:
+    - ycm

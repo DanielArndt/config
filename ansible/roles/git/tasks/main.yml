@@ -1,3 +1,6 @@
+- name: install git
+  package: name=git state=latest
+  become: true
 - name: ensure github template hooks directory exists
   file: 
     path: "{{ git_template_directory }}/hooks" 

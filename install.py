@@ -1,4 +1,6 @@
 #!/usr/bin/python
+
+import argparse
 import os
 import shlex
 import subprocess
@@ -12,6 +14,12 @@ try:
 except:
     SCRIPT_DIR = HOME + "/config/"
 LOG_FILE = open(SCRIPT_DIR + "/error.log", "w")
+
+
+def get_arguments():
+    parser = argparse.ArgumentParser(description='Setup a custom environment.')
+    parser.add_argument('--role', help='Only install this role')
+    return parser.parse_args()
 
 
 def ask(question, default=None):
@@ -41,9 +49,12 @@ def log_error(message):
     LOG_FILE.write(str(time) + ": " + message + "\n")
 
 
-def shell_call(command_str, cwd=HOME):
+def shell_call(command_str, cwd=HOME, raise_exception=False):
     cmd = shlex.split(command_str)
-    return subprocess.call(cmd, cwd=cwd)
+    ret_code = subprocess.call(cmd, cwd=cwd)
+    if ret_code != 0:
+        raise Exception('Error running command "{}": {}'.format(command_str, ret_code))
+    return ret_code
 
 
 def install_debian(package_name):
@@ -168,14 +179,57 @@ def install_thefuck():
     shell_call('sudo pip install thefuck --upgrade')
 
 
-def install_all():
+def install_ansible():
+    is_ansible_installed = find_executable('ansible-playbook')
+    if is_ansible_installed:
+        print('ansible playbook already installed')
+	return
+
     initialize_apt()
-    install_git()
-    setup_locale_debian()
-    install_vim()
-    install_thefuck()
-    install_tmux()
-    install_zsh()
+    install_debian('python-pip')
+    shell_call('sudo -H pip install -U pip setuptools')
+    shell_call('sudo -H pip install ansible')
+
+
+def install_ansible_toolbox():
+    is_ansible_toolbox_installed = find_executable('ansible-role')
+    if is_ansible_toolbox_installed:
+        print('ansible toolbox already installed')
+        return
+
+    shell_call('sudo -H pip install ansible-toolbox')
+
+
+def install_role(role):
+    shell_call(
+        'ansible-role -i "localhost," -c local {role}'.format(role=role),
+        cwd=os.path.join(SCRIPT_DIR, 'ansible')
+    )
+
+
+def install_all_roles():
+	shell_call(
+        'ansible-playbook -i "localhost," -c local master.yml',
+        cwd=os.path.join(SCRIPT_DIR, 'ansible')
+    )
+
+
+
+def install_all():
+    args = get_arguments()
+    install_ansible()
+    if args.role:
+        install_ansible_toolbox()
+        install_role(args.role)
+        return
+
+    install_all_roles()
+    #install_git()
+    #setup_locale_debian()
+    #install_vim()
+    #install_thefuck()
+    #install_tmux()
+    #install_zsh()
 
 
 if __name__ == "__main__":
@@ -188,4 +242,4 @@ if __name__ == "__main__":
         print("Please log a defect.")
         exit(1)
 
-install_all()
+    install_all()
