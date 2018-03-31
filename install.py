@@ -202,14 +202,14 @@ def install_ansible_toolbox():
 
 def install_role(role):
     shell_call(
-        'ansible-role -i "localhost," -c local {role}'.format(role=role),
+        'ansible-role -i "localhost," -c local {role} --ask-become-pass'.format(role=role),
         cwd=os.path.join(SCRIPT_DIR, 'ansible')
     )
 
 
 def install_all_roles():
 	shell_call(
-        'ansible-playbook -i "localhost," -c local master.yml',
+        'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass',
         cwd=os.path.join(SCRIPT_DIR, 'ansible')
     )
 
