@@ -12,7 +12,7 @@
       when: ansible_os_family == "Debian"
 
     - name: Install neovim from ppa
-      apt: name=neovim state=installed
+      apt: name=neovim state=present
 
     - name: set nvim for vi
       alternatives: name=vi path=/usr/bin/nvim
@@ -33,6 +33,11 @@
       src: "vimrc"
       dest: "{{ ansible_env.HOME }}/.vimrc"
 
+  - name: Create nvim config directory
+    file: 
+      path: "{{ ansible_env.HOME }}/.config/nvim" 
+      state: directory
+
   - name: Link vimrc for neovim
     file:
       src: "{{ ansible_env.HOME }}/.vimrc"
@@ -42,7 +47,7 @@
 # YouCompleteMe
 - block:
   - name: Install YouCompleteMe dependencies
-    apt: name={{ item }} state=installed
+    apt: name={{ item }} state=present
     become: true
     with_items: 
       - "{{ ycm_packages }}"

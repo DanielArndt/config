@@ -15,5 +15,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision "shell", inline: "DEBIAN_FRONTEND=noninteractive apt-get update"
-  config.vm.provision "shell", inline: "DEBIAN_FRONTEND=noninteractive apt-get -y install git swapspace"
+  config.vm.provision "shell", inline: "DEBIAN_FRONTEND=noninteractive apt-get -y install git swapspace python"
 end
