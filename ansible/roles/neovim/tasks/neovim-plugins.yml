@@ -23,3 +23,11 @@
 
   tags:
     - ycm
+
+# Ctags
+- block:
+  - name: Install ctags
+    apt: name="exuberant-ctags" state=present
+    become: true
+
+  tags: ctags

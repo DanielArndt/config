@@ -50,10 +50,10 @@ def log_error(message):
     LOG_FILE.write(str(time) + ": " + message + "\n")
 
 
-def shell_call(command_str, cwd=HOME, raise_exception=False):
+def shell_call(command_str, cwd=HOME, raise_exception=True):
     cmd = shlex.split(command_str)
     ret_code = subprocess.call(cmd, cwd=cwd)
-    if ret_code != 0:
+    if ret_code != 0 and raise_exception:
         raise Exception('Error running command "{}": {}'.format(command_str, ret_code))
     return ret_code
 
@@ -215,7 +215,8 @@ def install_role(role, tags):
     cmd_str = 'ansible-role -i "localhost," -c local {role} --ask-become-pass {tags_opt}'.format(role=role, tags_opt=tags_opt)
     shell_call(
         cmd_str,
-        cwd=os.path.join(SCRIPT_DIR, 'ansible')
+        cwd=os.path.join(SCRIPT_DIR, 'ansible'),
+        raise_exception=False,
     )
 
 
@@ -223,7 +224,8 @@ def install_all_roles():
     tags_opt = get_tags_opt_str(tags)
     shell_call(
         'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass {tags_opt}'.format(tags_opt=tags_opt),
-        cwd=os.path.join(SCRIPT_DIR, 'ansible')
+        cwd=os.path.join(SCRIPT_DIR, 'ansible'),
+        raise_exception=False,
     )
 
 
