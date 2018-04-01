@@ -19,6 +19,7 @@ LOG_FILE = open(SCRIPT_DIR + "/error.log", "w")
 def get_arguments():
     parser = argparse.ArgumentParser(description='Setup a custom environment.')
     parser.add_argument('--role', help='Only install this role')
+    parser.add_argument('--tags', help='Only run these tags')
     return parser.parse_args()
 
 
@@ -200,16 +201,28 @@ def install_ansible_toolbox():
     shell_call('sudo -H pip install ansible-toolbox')
 
 
-def install_role(role):
+def get_tags_opt_str(tags):
+    if tags:
+        # TODO: theres a much better way to do this
+        return '--tags ' + tags
+    else:
+        return ''
+
+
+
+def install_role(role, tags):
+    tags_opt = get_tags_opt_str(tags)
+    cmd_str = 'ansible-role -i "localhost," -c local {role} --ask-become-pass {tags_opt}'.format(role=role, tags_opt=tags_opt)
     shell_call(
-        'ansible-role -i "localhost," -c local {role} --ask-become-pass'.format(role=role),
+        cmd_str,
         cwd=os.path.join(SCRIPT_DIR, 'ansible')
     )
 
 
 def install_all_roles():
-	shell_call(
-        'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass',
+    tags_opt = get_tags_opt_str(tags)
+    shell_call(
+        'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass {tags_opt}'.format(tags_opt=tags_opt),
         cwd=os.path.join(SCRIPT_DIR, 'ansible')
     )
 
@@ -220,7 +233,7 @@ def install_all():
     install_ansible()
     if args.role:
         install_ansible_toolbox()
-        install_role(args.role)
+        install_role(args.role, args.tags)
         return
 
     install_all_roles()

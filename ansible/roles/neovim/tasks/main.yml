@@ -1,69 +1,10 @@
 ---
 
-- name: Install neovim prereq packages
-  package: name={{ item }} state=latest
-  with_items:
-    - "{{ required_packages }}"
-  become: true
+- import_tasks: neovim-base.yml 
+  tags: neovim,neovim:base
 
-- block: 
-    - name: Add neovim ppa 
-      apt_repository: repo="{{ neovim_ppa }}" state=present
-      when: ansible_os_family == "Debian"
+- import_tasks: neovim-config.yml 
+  tags: neovim,neovim:config
 
-    - name: Install neovim from ppa
-      apt: name=neovim state=present
-
-    - name: set nvim for vi
-      alternatives: name=vi path=/usr/bin/nvim
-    - name: set nvim for vim
-      alternatives: name=vim path=/usr/bin/nvim
-    - name: set nvim for editor
-      alternatives: name=editor path=/usr/bin/nvim
-  become: true
-
-- block:
-  - name: Clone vim config repo
-    git:
-      repo: "https://github.com/DanielArndt/vim-config.git"
-      dest: "{{ vim_runtime_dir }}"
-  
-  - name: Copy vimrc
-    template:
-      src: "vimrc"
-      dest: "{{ ansible_env.HOME }}/.vimrc"
-
-  - name: Create nvim config directory
-    file: 
-      path: "{{ ansible_env.HOME }}/.config/nvim" 
-      state: directory
-
-  - name: Link vimrc for neovim
-    file:
-      src: "{{ ansible_env.HOME }}/.vimrc"
-      dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
-      state: link
-
-# YouCompleteMe
-- block:
-  - name: Install YouCompleteMe dependencies
-    apt: name={{ item }} state=present
-    become: true
-    with_items: 
-      - "{{ ycm_packages }}"
-
-  - name: Install YouCompleteMe python modules
-    pip:
-      name: neovim
-    become: true
-
-  - name: Clone YouCompleteMe
-    git:
-      repo: "https://github.com/Valloric/YouCompleteMe"
-      dest: "{{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe"
-
-  - name: Run YouCompleteMe install (this may take a while)
-    shell: "python {{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe/install.py --clang-completer"
-
-  tags:
-    - ycm
+- import_tasks: neovim-plugins.yml 
+  tags: neovim,neovim:plugins

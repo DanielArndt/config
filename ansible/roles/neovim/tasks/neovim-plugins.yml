@@ -1,0 +1,25 @@
+---
+
+# YouCompleteMe
+- block:
+  - name: Install YouCompleteMe dependencies
+    apt: name={{ item }} state=present
+    become: true
+    with_items: 
+      - "{{ ycm_packages }}"
+
+  - name: Install YouCompleteMe python modules
+    pip:
+      name: neovim
+    become: true
+
+  - name: Clone YouCompleteMe
+    git:
+      repo: "https://github.com/Valloric/YouCompleteMe"
+      dest: "{{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe"
+
+  - name: Run YouCompleteMe install (this may take a while)
+    shell: "python {{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe/install.py --clang-completer"
+
+  tags:
+    - ycm
