@@ -5,7 +5,7 @@
   - name: Install YouCompleteMe dependencies
     apt: name={{ item }} state=present
     become: true
-    with_items: 
+    with_items:
       - "{{ ycm_packages }}"
 
   - name: Install YouCompleteMe python modules
@@ -13,13 +13,18 @@
       name: neovim
     become: true
 
-  - name: Clone YouCompleteMe
-    git:
-      repo: "https://github.com/Valloric/YouCompleteMe"
-      dest: "{{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe"
+  - name: Check if ycmd is running
+    shell: ps ax | grep -v grep | grep 'third_party/ycmd/ycmd' | wc -l
+    register: result
+
+  - name: debugging
+    debug:
+      var: result
 
   - name: Run YouCompleteMe install (this may take a while)
+    when: result.stdout|int == 0
     shell: "python {{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe/install.py --clang-completer"
+
 
   tags:
     - ycm
@@ -29,5 +34,10 @@
   - name: Install ctags
     apt: name="exuberant-ctags" state=present
     become: true
+
+  - name: Copy ctags rules
+    copy:
+      src: ctags
+      dest: "{{ ansible_env.HOME }}/.ctags"
 
   tags: ctags

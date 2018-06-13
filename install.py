@@ -15,15 +15,19 @@ except:
     SCRIPT_DIR = HOME + "/config/"
 LOG_FILE = open(SCRIPT_DIR + "/error.log", "w")
 
+interactive = True
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='Setup a custom environment.')
     parser.add_argument('--role', help='Only install this role')
     parser.add_argument('--tags', help='Only run these tags')
+    parser.add_argument('--non-interactive', help='Don\'t ask questions, just accept the default.', action="store_true")
     return parser.parse_args()
 
 
 def ask(question, default=None):
+    if not interactive:
+        return default
     yes_answers = {'Y', 'y', 'yes'}
     no_answers = {'N', 'n', 'no'}
     if default is None:
@@ -220,7 +224,7 @@ def install_role(role, tags):
     )
 
 
-def install_all_roles():
+def install_all_roles(tags):
     tags_opt = get_tags_opt_str(tags)
     shell_call(
         'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass {tags_opt}'.format(tags_opt=tags_opt),
@@ -230,15 +234,14 @@ def install_all_roles():
 
 
 
-def install_all():
-    args = get_arguments()
+def install_all(args):
     install_ansible()
     if args.role:
         install_ansible_toolbox()
         install_role(args.role, args.tags)
         return
 
-    install_all_roles()
+    install_all_roles(args.tags)
     #install_git()
     #setup_locale_debian()
     #install_vim()
@@ -248,6 +251,9 @@ def install_all():
 
 
 if __name__ == "__main__":
+    args = get_arguments()
+    if args.non_interactive:
+        interactive = False
     if not ask("This script only works on Debian / Ubuntu. Would you like to continue?",
                default=True):
         exit(1)
@@ -257,4 +263,4 @@ if __name__ == "__main__":
         print("Please log a defect.")
         exit(1)
 
-    install_all()
+    install_all(args)
