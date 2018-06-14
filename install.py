@@ -22,6 +22,7 @@ def get_arguments():
     parser.add_argument('--role', help='Only install this role')
     parser.add_argument('--tags', help='Only run these tags')
     parser.add_argument('--non-interactive', help='Don\'t ask questions, just accept the default.', action="store_true")
+    parser.add_argument('--diff', help='Show changes', action="store_true")
     return parser.parse_args()
 
 
@@ -188,12 +189,12 @@ def install_ansible():
     is_ansible_installed = find_executable('ansible-playbook')
     if is_ansible_installed:
         print('ansible playbook already installed')
-    return
+        return
 
     initialize_apt()
-    install_debian('python-pip')
-    shell_call('sudo -H pip install -U pip setuptools')
-    shell_call('sudo -H pip install ansible')
+    install_debian('python3-pip')
+    shell_call('sudo -H pip3 install -U pip setuptools')
+    shell_call('sudo -H pip3 install ansible')
 
 
 def install_ansible_toolbox():
@@ -205,18 +206,19 @@ def install_ansible_toolbox():
     shell_call('sudo -H pip install ansible-toolbox')
 
 
-def get_tags_opt_str(tags):
-    if tags:
-        # TODO: theres a much better way to do this
-        return '--tags ' + tags
-    else:
-        return ''
+def get_opt_str(args):
+    opts = ''
+    if args.tags:
+        opts += ' --tags ' + tags
+    if args.diff:
+        opts += ' --diff'
+    return opts
 
 
-def install_role(role, tags):
-    print('Installing role: {}'.format(role))
-    tags_opt = get_tags_opt_str(tags)
-    cmd_str = 'ansible-role -i "localhost," -c local {role} --ask-become-pass {tags_opt}'.format(role=role, tags_opt=tags_opt)
+def install_role(args):
+    print('Installing role: {}'.format(args.role))
+    additional_opts = get_opt_str(args)
+    cmd_str = 'ansible-role -i "localhost," -c local {role} --ask-become-pass {additional_opts}'.format(role=args.role, additional_opts=additional_opts)
     shell_call(
         cmd_str,
         cwd=os.path.join(SCRIPT_DIR, 'ansible'),
@@ -224,10 +226,10 @@ def install_role(role, tags):
     )
 
 
-def install_all_roles(tags):
-    tags_opt = get_tags_opt_str(tags)
+def install_all_roles(args):
+    additional_opts = get_opt_str(args)
     shell_call(
-        'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass {tags_opt}'.format(tags_opt=tags_opt),
+        'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass {additional_opts}'.format(additional_opts=additional_opts),
         cwd=os.path.join(SCRIPT_DIR, 'ansible'),
         raise_exception=False,
     )
@@ -238,10 +240,10 @@ def install_all(args):
     install_ansible()
     if args.role:
         install_ansible_toolbox()
-        install_role(args.role, args.tags)
+        install_role(args)
         return
 
-    install_all_roles(args.tags)
+    install_all_roles(args)
     #install_git()
     #setup_locale_debian()
     #install_vim()
