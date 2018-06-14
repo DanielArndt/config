@@ -1,0 +1,61 @@
+# Without this, tmux will eat the colours!
+export TERM=screen-256color
+
+# Prevent zsh from renaming my terminals
+export DISABLE_AUTO_TITLE=true
+
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$HOME/bin:/usr/local/go/bin:$PATH
+export HOSTNAME=$(hostname)
+
+source ~/config/zsh/antigen/antigen.zsh
+source ~/config/zsh/.antigenrc
+
+# Keep 10000 lines of history within the shell and save it to ~/.zsh_history:
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+
+# Use Vi key bindings
+bindkey -v
+
+# Reduce the timeout on escape sequences on zsh:
+# wait 10ms. (send to vim/tmux faster)
+export KEYTIMEOUT=1
+
+# Set host if not set. Bash would normally set this.
+[ -z $HOST ] && export HOST=`hostname`
+
+# Source all custom configs
+for file in $(find ~/config/zsh/.zsh.d/ -type f | sort)
+do
+    source $file
+done
+
+eval $(thefuck --alias)
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PIP_VIRTUALENV_BASE=WORKON_HOME
+
+export PIP_REQUIRE_VIRTUALENV=true
+
+export SYSTEM_PIP=`which pip`
+function syspip {
+    PIP_REQUIRE_VIRTUALENV="" sudo -H $SYSTEM_PIP "$@"
+}
+export EDITOR="vim"
+
+# Don't let me freeze the terminal with ctrl-s.
+# It's annoying and I'm fairly certain never useful these days.
+stty -ixon
+
+if [[ -e /usr/local/bin/virtualenvwrapper.sh ]]; then
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
+
+# Vim Pager
+if hash vimpager 2>/dev/null; then
+    export PAGER=/usr/local/bin/vimpager
+    alias less=$PAGER
+    alias zless=$PAGER
+fi

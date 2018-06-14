@@ -13,16 +13,17 @@
       name: neovim
     become: true
 
-  - name: Check if ycmd is running
-    shell: ps ax | grep -v grep | grep 'third_party/ycmd/ycmd' | wc -l
-    register: result
+  - name: Check if ycmd exists
+    stat:
+      path: /usr/bin/ycmd
+    register: ycmd_stat
 
   - name: debugging
     debug:
-      var: result
+      var: ycmd_stat
 
   - name: Run YouCompleteMe install (this may take a while)
-    when: result.stdout|int == 0
+    when: ycmd_stat.stat.exists == False
     shell: "python {{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe/install.py --clang-completer"
 
 

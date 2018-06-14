@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import argparse
 import os
@@ -38,7 +38,7 @@ def ask(question, default=None):
         prompt = "y/N"
 
     while True:
-        user_input = raw_input(question + ' [{}]: '.format(prompt))
+        user_input = input(question + ' [{}]: '.format(prompt))
         if user_input in yes_answers:
             return True
         if user_input in no_answers:
@@ -188,7 +188,7 @@ def install_ansible():
     is_ansible_installed = find_executable('ansible-playbook')
     if is_ansible_installed:
         print('ansible playbook already installed')
-	return
+    return
 
     initialize_apt()
     install_debian('python-pip')
@@ -213,8 +213,8 @@ def get_tags_opt_str(tags):
         return ''
 
 
-
 def install_role(role, tags):
+    print('Installing role: {}'.format(role))
     tags_opt = get_tags_opt_str(tags)
     cmd_str = 'ansible-role -i "localhost," -c local {role} --ask-become-pass {tags_opt}'.format(role=role, tags_opt=tags_opt)
     shell_call(
