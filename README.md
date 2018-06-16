@@ -20,7 +20,7 @@ home directory. (ie. $HOME/config)_
 Finally, run the installation script.
 
 ```bash
-     ./config/install.py
+     python3 config/install.py
 ```
 
 That is all.
