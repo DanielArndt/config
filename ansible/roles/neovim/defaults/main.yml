@@ -1,0 +1,21 @@
+---
+
+required_packages:
+    - software-properties-common
+    - python-dev
+    - python-pip
+    - python3-dev
+    - python3-pip
+
+neovim_ppa: ppa:neovim-ppa/unstable
+
+vim_runtime_dir: "{{ ansible_env.HOME }}/.vim_runtime"
+
+ycm_packages:
+    - build-essential
+    - cmake
+    - python-dev 
+    - python3-dev
+    - libclang-dev
+      #
+      #ycm_build_dir: "{{ ansible_env.HOME }}/.ycm_build"

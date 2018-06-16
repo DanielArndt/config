@@ -1,0 +1,22 @@
+---
+
+- name: Clone vim config repo
+  git:
+    repo: "https://github.com/DanielArndt/vim-config.git"
+    dest: "{{ vim_runtime_dir }}"
+
+- name: Copy vimrc
+  template:
+    src: "vimrc"
+    dest: "{{ ansible_env.HOME }}/.vimrc"
+
+- name: Create nvim config directory
+  file: 
+    path: "{{ ansible_env.HOME }}/.config/nvim" 
+    state: directory
+
+- name: Link vimrc for neovim
+  file:
+    src: "{{ ansible_env.HOME }}/.vimrc"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
+    state: link

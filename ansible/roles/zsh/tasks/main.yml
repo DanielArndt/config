@@ -1,0 +1,4 @@
+- import_tasks: zsh-base.yml
+  tags: zsh,zsh:base
+- import_tasks: zsh-plugins.yml
+  tags: zsh,zsh:plugins
