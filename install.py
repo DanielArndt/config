@@ -209,7 +209,7 @@ def install_ansible_toolbox():
 def get_opt_str(args):
     opts = ''
     if args.tags:
-        opts += ' --tags ' + tags
+        opts += ' --tags ' + args.tags
     if args.diff:
         opts += ' --diff'
     return opts

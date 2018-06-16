@@ -8,8 +8,8 @@ export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$HOME/bin:/usr/local/go/bin:$PATH
 export HOSTNAME=$(hostname)
 
-source ~/config/zsh/antigen/antigen.zsh
-source ~/config/zsh/.antigenrc
+source ~/.zsh/antigen/antigen.zsh
+source ~/.zsh/.antigenrc
 
 # Keep 10000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=10000

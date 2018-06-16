@@ -7,3 +7,8 @@
   copy:
     src: zshrc
     dest: "{{ ansible_env.HOME }}/.zshrc"
+
+- name: Copy antigenrc
+  copy:
+    src: antigenrc
+    dest: "{{ zsh_dir }}/.antigenrc"
