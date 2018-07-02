@@ -18,10 +18,6 @@
       path: /usr/bin/ycmd
     register: ycmd_stat
 
-  - name: debugging
-    debug:
-      var: ycmd_stat
-
   - name: Run YouCompleteMe install (this may take a while)
     when: ycmd_stat.stat.exists == False
     shell: "python {{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe/install.py --clang-completer"

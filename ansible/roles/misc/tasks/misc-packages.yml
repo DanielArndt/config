@@ -1,2 +1,10 @@
 - name: Install thefuck
   pip: name=thefuck executable=pip3
+
+- name: Install virtualenvwrapper
+  pip: name=virtualenvwrapper executable=pip3
+
+- name: Install htop
+  package: name=htop state=present
+  become: true
+

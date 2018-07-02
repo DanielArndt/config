@@ -1,3 +1,14 @@
 - name: Install zsh
   package: name=zsh state=present
   become: true
+
+- name: Copy zshrc
+  copy:
+    src: zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+
+- name: Change shell of current user
+  user:
+    name: "{{ current_user }}"
+    shell: /bin/zsh
+  become: yes
