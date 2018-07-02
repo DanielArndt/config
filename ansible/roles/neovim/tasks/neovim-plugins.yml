@@ -1,0 +1,40 @@
+---
+
+# YouCompleteMe
+- block:
+  - name: Install YouCompleteMe dependencies
+    apt: name={{ item }} state=present
+    become: true
+    with_items:
+      - "{{ ycm_packages }}"
+
+  - name: Install YouCompleteMe python modules
+    pip:
+      name: neovim
+    become: true
+
+  - name: Check if ycmd exists
+    stat:
+      path: /usr/bin/ycmd
+    register: ycmd_stat
+
+  - name: Run YouCompleteMe install (this may take a while)
+    when: ycmd_stat.stat.exists == False
+    shell: "python {{ vim_runtime_dir }}/sources_non_forked/YouCompleteMe/install.py --clang-completer"
+
+
+  tags:
+    - ycm
+
+# Ctags
+- block:
+  - name: Install ctags
+    apt: name="exuberant-ctags" state=present
+    become: true
+
+  - name: Copy ctags rules
+    copy:
+      src: ctags
+      dest: "{{ ansible_env.HOME }}/.ctags"
+
+  tags: ctags

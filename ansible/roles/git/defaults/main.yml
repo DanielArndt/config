@@ -1,0 +1,1 @@
+git_template_directory: "{{ ansible_env.HOME }}/.git_template"

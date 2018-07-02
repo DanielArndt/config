@@ -1,0 +1,23 @@
+---
+
+- name: Install neovim prereq packages
+  package: name={{ item }} state=latest
+  with_items:
+    - "{{ required_packages }}"
+  become: true
+
+- block: 
+    - name: Add neovim ppa 
+      apt_repository: repo="{{ neovim_ppa }}" state=present
+      when: ansible_os_family == "Debian"
+
+    - name: Install neovim from ppa
+      apt: name=neovim state=present
+
+    - name: set nvim for vi
+      alternatives: name=vi path=/usr/bin/nvim
+    - name: set nvim for vim
+      alternatives: name=vim path=/usr/bin/nvim
+    - name: set nvim for editor
+      alternatives: name=editor path=/usr/bin/nvim
+  become: true

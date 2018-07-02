@@ -2,3 +2,5 @@ zsh/antigen/
 .vagrant
 *.zwc
 error.log
+*.retry
+*.swp

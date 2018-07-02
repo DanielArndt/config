@@ -38,7 +38,7 @@ if hash git 2>/dev/null; then
     alias gg="git gui&"
     alias gl="git l"
     alias glp="git lp"
-    alias gs="git status -sb"
+    alias gst="git status -sb"
     alias gc!="git commit --amend --reset-author"
 
     function gmod {

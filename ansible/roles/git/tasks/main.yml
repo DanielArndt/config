@@ -1,0 +1,7 @@
+- name: install git
+  package: name=git state=latest
+  become: true
+  tags: git
+
+- import_tasks: git-templates.yml
+  tags: git,git:templates

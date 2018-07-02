@@ -1,0 +1,1 @@
+zsh_dir: "{{ ansible_env.HOME }}/.zsh"

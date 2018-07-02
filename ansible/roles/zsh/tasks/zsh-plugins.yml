@@ -1,0 +1,9 @@
+- name: Clone antigen repo
+  git:
+    repo: "https://github.com/zsh-users/antigen.git"
+    dest: "{{ zsh_dir }}/antigen"
+
+- name: Copy antigenrc
+  copy:
+    src: antigenrc
+    dest: "{{ zsh_dir }}/.antigenrc"

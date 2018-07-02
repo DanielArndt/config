@@ -4,7 +4,7 @@ Installation
 First, install git and python if they aren't already installed.
 
 ```bash
-    sudo apt-get install git python
+    sudo apt-get install git python3
 ```
 
 Then, clone the repository into your home directory.
@@ -20,7 +20,7 @@ home directory. (ie. $HOME/config)_
 Finally, run the installation script.
 
 ```bash
-     python config/install.py
+     python3 config/install.py
 ```
 
 That is all.
