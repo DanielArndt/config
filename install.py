@@ -64,7 +64,10 @@ def shell_call(command_str, cwd=HOME, raise_exception=True):
 
 
 def install_debian(package_name):
-    shell_call('sudo apt-get install {}'.format(package_name))
+    if interactive:
+        shell_call('sudo apt-get install {}'.format(package_name))
+    else:
+        shell_call('sudo apt-get install -y {}'.format(package_name))
 
 
 def install_pip(package_name):
@@ -193,7 +196,7 @@ def install_ansible():
 
     initialize_apt()
     install_debian('python3-pip')
-    shell_call('sudo -H pip3 install -U pip setuptools')
+    shell_call('sudo -H pip3 install -U pip setuptools cryptography')
     shell_call('sudo -H pip3 install ansible')
 
 
