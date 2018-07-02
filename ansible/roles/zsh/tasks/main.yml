@@ -1,4 +1,6 @@
 - import_tasks: zsh-base.yml
   tags: zsh,zsh:base
+  vars:
+    current_user: "{{ ansible_user_id}}"
 - import_tasks: zsh-plugins.yml
   tags: zsh,zsh:plugins

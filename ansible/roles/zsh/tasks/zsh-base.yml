@@ -6,3 +6,9 @@
   copy:
     src: zshrc
     dest: "{{ ansible_env.HOME }}/.zshrc"
+
+- name: Change shell of current user
+  user:
+    name: "{{ current_user }}"
+    shell: /bin/zsh
+  become: yes
