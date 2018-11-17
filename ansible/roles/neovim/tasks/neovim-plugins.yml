@@ -11,7 +11,10 @@
   - name: Install YouCompleteMe python modules
     pip:
       name: neovim
-    become: true
+      executable: pip3
+      extra_args: --user
+    environment:
+      PIP_REQUIRE_VIRTUALENV: ""
 
   - name: Check if ycmd exists
     stat:

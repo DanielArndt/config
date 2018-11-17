@@ -5,7 +5,7 @@ export TERM=screen-256color
 export DISABLE_AUTO_TITLE=true
 
 export GOPATH=$HOME/go
-export PATH=$GOPATH/bin:$HOME/bin:/usr/local/go/bin:$PATH
+export PATH=$HOME/.local/bin:$GOPATH/bin:$HOME/bin:/usr/local/go/bin:$PATH
 export HOSTNAME=$(hostname)
 
 source ~/.zsh/antigen/antigen.zsh
@@ -41,16 +41,20 @@ export PIP_REQUIRE_VIRTUALENV=true
 
 export SYSTEM_PIP=`which pip`
 function syspip {
-    PIP_REQUIRE_VIRTUALENV="" sudo -H $SYSTEM_PIP "$@"
+    PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP "$@"
 }
-export EDITOR="vim"
+export SYSTEM_PIP3=`which pip3`
+function syspip3 {
+    PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP3 "$@"
+}
+export EDITOR="nvim"
 
 # Don't let me freeze the terminal with ctrl-s.
 # It's annoying and I'm fairly certain never useful these days.
 stty -ixon
 
 if [[ -e /usr/local/bin/virtualenvwrapper.sh ]]; then
-    VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 source /usr/local/bin/virtualenvwrapper.sh
+    VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 source $HOME/.local/bin/virtualenvwrapper.sh
 fi
 
 # Vim Pager

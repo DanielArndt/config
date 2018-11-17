@@ -4,7 +4,7 @@ Installation
 First, install git and python if they aren't already installed.
 
 ```bash
-    sudo apt-get install git python3
+    sudo apt-get install git python3 python3-distutils
 ```
 
 Then, clone the repository into your home directory.

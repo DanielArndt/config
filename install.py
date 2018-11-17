@@ -71,7 +71,7 @@ def install_debian(package_name):
 
 
 def install_pip(package_name):
-    shell_call('sudo pip install {}'.format(package_name))
+    shell_call('pip install --user {}'.format(package_name))
 
 
 def link_file(target, source):
@@ -79,53 +79,6 @@ def link_file(target, source):
     symbolic = '-s'
     options = ' '.join([interactive, symbolic])
     shell_call('ln {options} {} {}'.format(source, target, options=options))
-
-
-def install_zsh():
-    install_debian('zsh')
-    git_clone("https://github.com/zsh-users/antigen.git",
-              SCRIPT_DIR + "/zsh/antigen")
-    link_file(HOME + "/.zshrc", SCRIPT_DIR + "/zsh/.zshrc")
-    shell_call('chsh -s /bin/zsh')
-    if os.environ['SHELL'] != '/bin/zsh':
-        shell_call('zsh')
-
-
-def install_git():
-    shell_call('mkdir -p {home}/.git_template/hooks'.format(home=HOME))
-    link_file(HOME + "/.git_template/hooks/ctags",
-              SCRIPT_DIR + "/git/.git_template/hooks/ctags")
-    link_file(HOME + "/.git_template/hooks/post-checkout",
-              SCRIPT_DIR + "/git/.git_template/hooks/post-checkout")
-    link_file(HOME + "/.git_template/hooks/post-commit",
-              SCRIPT_DIR + "/git/.git_template/hooks/post-commit")
-    link_file(HOME + "/.git_template/hooks/post-merge",
-              SCRIPT_DIR + "/git/.git_template/hooks/post-merge")
-    link_file(HOME + "/.git_template/hooks/post-rewrite",
-              SCRIPT_DIR + "/git/.git_template/hooks/post-rewrite")
-    link_file(HOME + "/.git_template/hooks/pre-push",
-              SCRIPT_DIR + "/git/.git_template/hooks/pre-push")
-    shell_call('git config --global init.templatedir {home}/.git_template'
-               .format(home=HOME))
-
-
-def install_tmux():
-    tmux_location = find_executable("tmux")
-    if not tmux_location:
-        install_debian("tmux")
-    else:
-        log_error("tmux is already installed.")
-        if not ask("Would you like to overwrite tmux config with those in this script?",
-                   default=False):
-            return
-    link_file(HOME + "/.tmux.conf", SCRIPT_DIR + "/tmux/.tmux.conf")
-
-
-def setup_locale_debian():
-    if not ask("Would you like to configure locales for Debian?",
-               default=False):
-        return
-    shell_call('sudo dpkg-reconfigure locales')
 
 
 def initialize_apt():
@@ -166,28 +119,6 @@ def install_vim_plugins():
     link_file(HOME + "/.ctags", SCRIPT_DIR + "/vim/.ctags")
 
 
-def install_vim():
-    print("Installing vim...")
-    git_clone("https://github.com/DanielArndt/vim-config.git",
-              HOME + "/.vim_runtime")
-    # TODO link .vimrc
-    shell_call('git submodule update --init --recursive',
-               cwd=HOME + '/.vim_runtime/')
-    install_debian("vim-nox")
-    if ask("Would you like to switch default editors?", default=False):
-        shell_call('sudo update-alternatives --config editor')
-    install_vim_plugins()
-    vim_location = find_executable('vim')
-    shell_call('git config --global core.editor {}'.format(vim_location))
-    link_file(HOME + "/.vimrc", SCRIPT_DIR + "/vim/.vimrc")
-
-
-def install_thefuck():
-    install_debian("python-dev")
-    install_debian("python-pip")
-    shell_call('sudo pip install thefuck --upgrade')
-
-
 def install_ansible():
     is_ansible_installed = find_executable('ansible-playbook')
     if is_ansible_installed:
@@ -196,8 +127,8 @@ def install_ansible():
 
     initialize_apt()
     install_debian('python3-pip')
-    shell_call('sudo -H pip3 install -U pip setuptools cryptography')
-    shell_call('sudo -H pip3 install ansible')
+    shell_call('pip3 install  --user -U pip setuptools cryptography')
+    shell_call('pip3 install --user ansible')
 
 
 def install_ansible_toolbox():
@@ -206,7 +137,7 @@ def install_ansible_toolbox():
         print('ansible toolbox already installed')
         return
 
-    shell_call('sudo -H pip install ansible-toolbox')
+    shell_call('pip3 install --user ansible-toolbox')
 
 
 def get_opt_str(args):
@@ -221,7 +152,7 @@ def get_opt_str(args):
 def install_role(args):
     print('Installing role: {}'.format(args.role))
     additional_opts = get_opt_str(args)
-    cmd_str = 'ansible-role -i "localhost," -c local {role} --ask-become-pass {additional_opts}'.format(role=args.role, additional_opts=additional_opts)
+    cmd_str = 'ansible-role -i "localhost," -c local {role} --ask-become-pass -e "ansible_python_interpreter=/usr/bin/python3" {additional_opts}'.format(role=args.role, additional_opts=additional_opts)
     shell_call(
         cmd_str,
         cwd=os.path.join(SCRIPT_DIR, 'ansible'),
@@ -232,7 +163,7 @@ def install_role(args):
 def install_all_roles(args):
     additional_opts = get_opt_str(args)
     shell_call(
-        'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass {additional_opts}'.format(additional_opts=additional_opts),
+        'ansible-playbook -i "localhost," -c local master.yml --ask-become-pass -e "ansible_python_interpreter=/usr/bin/python3" {additional_opts}'.format(additional_opts=additional_opts),
         cwd=os.path.join(SCRIPT_DIR, 'ansible'),
         raise_exception=False,
     )
@@ -247,12 +178,6 @@ def install_all(args):
         return
 
     install_all_roles(args)
-    #install_git()
-    #setup_locale_debian()
-    #install_vim()
-    #install_thefuck()
-    #install_tmux()
-    #install_zsh()
 
 
 if __name__ == "__main__":
