@@ -63,3 +63,6 @@ if hash vimpager 2>/dev/null; then
     alias less=$PAGER
     alias zless=$PAGER
 fi
+
+# Auto start ssh-agent
+eval `keychain --eval 2>/dev/null`

@@ -13,7 +13,6 @@ try:
     SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 except:
     SCRIPT_DIR = HOME + "/config/"
-LOG_FILE = open(SCRIPT_DIR + "/error.log", "w")
 
 interactive = True
 
@@ -49,15 +48,9 @@ def ask(question, default=None):
         print("Did not recognize input: {}".format(user_input))
 
 
-def log_error(message):
-    time = datetime.now()
-    print(message)
-    LOG_FILE.write(str(time) + ": " + message + "\n")
-
-
-def shell_call(command_str, cwd=HOME, raise_exception=True):
+def shell_call(command_str, cwd=HOME, raise_exception=True, **kwargs):
     cmd = shlex.split(command_str)
-    ret_code = subprocess.call(cmd, cwd=cwd)
+    ret_code = subprocess.call(cmd, cwd=cwd, **kwargs)
     if ret_code != 0 and raise_exception:
         raise Exception('Error running command "{}": {}'.format(command_str, ret_code))
     return ret_code
@@ -86,39 +79,6 @@ def initialize_apt():
     shell_call('sudo apt-get update')
 
 
-def install_ycm():
-    install_debian("vim-youcompleteme")
-    # FIXME: Broken. See https://github.com/DanielArndt/config/issues/25
-    #link_file(HOME + "/.vim_runtime/sources_non_forked/vim-youcompleteme",
-    #          "/usr/share/vim-youcompleteme")
-
-
-def git_clone(git_url, target_directory):
-    if exists(target_directory):
-        log_error("Error, {} already exists. Will not clone {}".format(
-                target_directory, git_url))
-        return
-    shell_call('git clone {url} {target_directory}'.format(
-        url=git_url,
-        target_directory=target_directory))
-
-
-def install_vim_plugins():
-    install_ycm()
-    git_clone("https://github.com/godlygeek/csapprox.git",
-              HOME + "/.vim_runtime/sources_non_forked/csapprox")
-    git_clone("https://github.com/majutsushi/tagbar",
-              HOME + "/.vim_runtime/sources_non_forked/tagbar")
-    git_clone("https://github.com/xolox/vim-misc",
-              HOME + "/.vim_runtime/sources_non_forked/vim-misc")
-    git_clone("https://github.com/xolox/vim-easytags.git",
-              HOME + "/.vim_runtime/sources_non_forked/vim-easytags")
-    git_clone("https://github.com/christoomey/vim-tmux-navigator",
-              HOME + "/.vim_runtime/sources_non_forked/vim-tmux-navigator")
-    install_debian('exuberant-ctags')
-    link_file(HOME + "/.ctags", SCRIPT_DIR + "/vim/.ctags")
-
-
 def install_ansible():
     is_ansible_installed = find_executable('ansible-playbook')
     if is_ansible_installed:
@@ -128,7 +88,11 @@ def install_ansible():
     initialize_apt()
     install_debian('python3-pip')
     shell_call('pip3 install  --user -U pip setuptools cryptography')
-    shell_call('pip3 install --user ansible')
+    # Pip is updated now, which may break the default debian script. Pass the
+    # right path so that it uses the right pip init script.
+    env = os.environ
+    env['PATH'] = '{home}/.local/bin:'.format(home=HOME) + env['PATH']
+    shell_call('pip3 install --user ansible', env=env)
 
 
 def install_ansible_toolbox():

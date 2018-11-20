@@ -15,6 +15,13 @@
     PIP_REQUIRE_VIRTUALENV: ""
 
 - name: Install htop
-  package: name=htop state=present
+  package:
+    name: htop
+    state: present
   become: true
 
+- name: Install keychain
+  package:
+    name: keychain
+    state: present
+  become: true

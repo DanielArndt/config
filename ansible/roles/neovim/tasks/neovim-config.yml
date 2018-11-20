@@ -11,8 +11,8 @@
     dest: "{{ ansible_env.HOME }}/.vimrc"
 
 - name: Create nvim config directory
-  file: 
-    path: "{{ ansible_env.HOME }}/.config/nvim" 
+  file:
+    path: "{{ ansible_env.HOME }}/.config/nvim"
     state: directory
 
 - name: Link vimrc for neovim
