@@ -54,6 +54,7 @@ export EDITOR="nvim"
 stty -ixon
 
 if [[ -e $HOME/.local/bin/virtualenvwrapper.sh ]]; then
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
     VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 source $HOME/.local/bin/virtualenvwrapper.sh
 fi
 

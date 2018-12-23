@@ -21,6 +21,7 @@ antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-syntax-highlighting
 
 antigen bundle command-not-found
+antigen bundle safe-paste
 
 antigen theme https://peculiar.arndt.ca/darndt/zsh_themes.git ringwood
 
