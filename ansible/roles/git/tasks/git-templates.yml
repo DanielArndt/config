@@ -6,7 +6,7 @@
   copy:
     src: "git_template/hooks/{{ item }}"
     dest: "{{ git_template_directory }}/hooks/{{ item }}"
-    mode: u+rwx
+    mode: "u+rwx"
   with_items:
     - ctags
     - post-checkout

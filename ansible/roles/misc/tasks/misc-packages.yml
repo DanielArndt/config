@@ -20,6 +20,12 @@
     state: present
   become: true
 
+- name: Install silversearcher-ag
+  package:
+    name: silversearcher-ag
+    state: present
+  become: true
+
 - name: Install keychain
   package:
     name: keychain
