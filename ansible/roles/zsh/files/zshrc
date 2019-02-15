@@ -90,6 +90,9 @@ _my_generic () {
     }
 bindkey '^X^a' all-matches
 
+# tabtab source for electron-forge package
+# uninstall by removing these lines or running `tabtab uninstall electron-forge`
+[[ -f /home/darndt/git/ganache/node_modules/tabtab/.completions/electron-forge.zsh ]] && . /home/darndt/git/ganache/node_modules/tabtab/.completions/electron-forge.zsh
 
 # Auto start ssh-agent
 eval `keychain --eval 2>/dev/null`
