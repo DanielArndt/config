@@ -20,8 +20,9 @@ def get_arguments():
     parser = argparse.ArgumentParser(description='Setup a custom environment.')
     parser.add_argument('--role', help='Only install this role')
     parser.add_argument('--tags', help='Only run these tags')
-    parser.add_argument('--non-interactive', help='Don\'t ask questions, just accept the default.', action="store_true")
-    parser.add_argument('--check', help="Don't make changes changes (dry run)", action="store_true")
+    parser.add_argument('--non-interactive', help="Don't ask questions, just accept the default.", action="store_true")
+    parser.add_argument('--diff', help='Show changes', action="store_true")
+    parser.add_argument('--check', help="Dry run.", action="store_true")
     return parser.parse_args()
 
 
