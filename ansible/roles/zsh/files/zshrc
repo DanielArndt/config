@@ -1,6 +1,10 @@
 # Without this, tmux will eat the colours!
 export TERM=screen-256color
 
+if [[ -e $HOME/.secrets ]]; then
+    source $HOME/.secrets
+fi
+
 # Prevent zsh from renaming my terminals
 export DISABLE_AUTO_TITLE=true
 
@@ -36,14 +40,18 @@ eval $(thefuck --alias)
 
 export WORKON_HOME=$HOME/.virtualenvs
 export PIP_VIRTUALENV_BASE=WORKON_HOME
-
 export PIP_REQUIRE_VIRTUALENV=true
+export PIP_USER='yes' # Install at user level by default
 
-export SYSTEM_PIP=`which pip`
+function which_skip_alias {
+    # Ignore alias -- trying to find the binary
+    which -a "$@" | grep -v alias | head -n1
+}
+export SYSTEM_PIP=`which_skip_alias pip`
 function syspip {
     PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP "$@"
 }
-export SYSTEM_PIP3=`which pip3`
+export SYSTEM_PIP3=`which_skip_alias pip3`
 function syspip3 {
     PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP3 "$@"
 }
@@ -54,8 +62,8 @@ export EDITOR="nvim"
 stty -ixon
 
 if [[ -e $HOME/.local/bin/virtualenvwrapper.sh ]]; then
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-    VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 source $HOME/.local/bin/virtualenvwrapper.sh
+    export VIRTUALENVWRAPPER_PYTHON=`which_skip_alias python3`
+    source $HOME/.local/bin/virtualenvwrapper.sh
 fi
 
 # Vim Pager
@@ -64,6 +72,24 @@ if hash vimpager 2>/dev/null; then
     alias less=$PAGER
     alias zless=$PAGER
 fi
+
+NPM_PACKAGES="${HOME}/.npm-packages"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+
+# Unset manpath so we can inherit from /etc/manpath via the `manpath` command
+unset MANPATH # delete if you already modified MANPATH elsewhere in your config
+export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+
+# Insert all matches with C-x C-a
+zle -C all-matches complete-word _my_generic
+zstyle ':completion:all-matches::::' completer _all_matches
+zstyle ':completion:all-matches:*' old-matches only
+_my_generic () {
+      local ZSH_TRACE_GENERIC_WIDGET=  # works with "setopt nounset"
+        _generic "$@"
+    }
+bindkey '^X^a' all-matches
+
 
 # Auto start ssh-agent
 eval `keychain --eval 2>/dev/null`
