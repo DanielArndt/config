@@ -41,6 +41,10 @@ if hash git 2>/dev/null; then
     alias gst="git status -sb"
     alias gc!="git commit --amend --reset-author"
 
+    function ghra {
+        python3 ~/config/zsh/github.py remote add $@
+    }
+
     function gmod {
         local _path=$(git rev-parse --show-toplevel || pwd)
         local _files=
@@ -102,4 +106,3 @@ if hash tmux 2>/dev/null; then
         fi
     }
 fi
-
