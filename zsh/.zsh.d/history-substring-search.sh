@@ -3,6 +3,8 @@
 zmodload zsh/terminfo
 bindkey "^[[A" history-substring-search-up
 bindkey "^[[B" history-substring-search-down
+bindkey "^[OA" history-substring-search-up
+bindkey "^[OB" history-substring-search-down
 
 # bind P and N for EMACS mode
 bindkey -M emacs '^P' history-substring-search-up
