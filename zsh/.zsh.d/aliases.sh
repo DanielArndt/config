@@ -41,6 +41,10 @@ if hash git 2>/dev/null; then
     alias gst="git status -sb"
     alias gc!="git commit --amend --reset-author"
 
+    function ghra {
+        python3 ~/config/zsh/github.py remote add $@
+    }
+
     function gmod {
         local _path=$(git rev-parse --show-toplevel || pwd)
         local _files=
@@ -82,10 +86,16 @@ alias syncssh='rsync --partial --progress --rsh=ssh'
 if hash docker 2>/dev/null; then
     alias d='docker'
     alias di='docker images'
+    alias dgc='docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc -e REMOVE_VOLUMES=1 spotify/docker-gc'
 fi
 
 if hash docker-compose 2>/dev/null; then
     alias dcom='docker-compose'
+    function dcrb() {
+        docker-compose stop $1
+        docker-compose rm -f $1
+        docker-compose build $1 && docker-compose up -d $1
+    }
 fi
 
 if hash tmux 2>/dev/null; then
@@ -102,4 +112,3 @@ if hash tmux 2>/dev/null; then
         fi
     }
 fi
-
