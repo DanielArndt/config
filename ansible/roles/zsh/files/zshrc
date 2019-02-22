@@ -88,7 +88,7 @@ _my_generic () {
       local ZSH_TRACE_GENERIC_WIDGET=  # works with "setopt nounset"
         _generic "$@"
     }
-bindkey '^X^a' all-matches
+bindkey '^X^X' all-matches
 
 # tabtab source for electron-forge package
 # uninstall by removing these lines or running `tabtab uninstall electron-forge`
