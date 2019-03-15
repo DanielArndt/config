@@ -112,3 +112,5 @@ if hash tmux 2>/dev/null; then
         fi
     }
 fi
+
+alias supg='sudo apt-get update && sudo apt-get -y upgrade'
