@@ -32,12 +32,17 @@
 # Ctags
 - block:
   - name: Install ctags
-    apt: name="exuberant-ctags" state=present
+    apt: name="universal-ctags" state=present
     become: true
+
+  - name: ensure ctags directory exists
+    file:
+      path: "{{ git_template_directory }}/hooks"
+      state: directory
 
   - name: Copy ctags rules
     copy:
       src: ctags
-      dest: "{{ ansible_env.HOME }}/.ctags"
+      dest: "{{ ansible_env.HOME }}/.ctags.d/default.ctags"
 
   tags: ctags
