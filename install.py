@@ -20,6 +20,7 @@ def get_arguments():
     parser = argparse.ArgumentParser(description='Setup a custom environment.')
     parser.add_argument('--role', help='Only install this role')
     parser.add_argument('--tags', help='Only run these tags')
+    parser.add_argument('--skip-tags', help='Run without these tags')
     parser.add_argument('--non-interactive', help="Don't ask questions, just accept the default.", action="store_true")
     parser.add_argument('--diff', help='Show changes', action="store_true")
     parser.add_argument('--check', help="Dry run.", action="store_true")
@@ -109,6 +110,8 @@ def get_opt_str(args):
     opts = '--diff'
     if args.tags:
         opts += ' --tags ' + args.tags
+    if args.skip_tags:
+        opts += ' --skip-tags ' + args.skip_tags
     if args.check:
         opts += ' --check'
     return opts

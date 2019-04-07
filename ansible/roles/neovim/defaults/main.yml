@@ -9,12 +9,14 @@ required_packages:
 
 neovim_ppa: ppa:neovim-ppa/unstable
 
+universal_ctags_ppa: ppa:hnakamur/universal-ctags
+
 vim_runtime_dir: "{{ ansible_env.HOME }}/.vim_runtime"
 
 ycm_packages:
     - build-essential
     - cmake
-    - python-dev 
+    - python-dev
     - python3-dev
     - libclang-dev
       #

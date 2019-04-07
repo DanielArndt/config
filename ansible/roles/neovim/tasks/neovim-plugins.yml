@@ -31,13 +31,20 @@
 
 # Ctags
 - block:
+  - name: Add universal-ctags ppa
+    apt_repository:
+      repo: "{{ universal_ctags_ppa }}"
+      state: present
+    when: ansible_os_family == "Debian"
+    become: true
+
   - name: Install ctags
     apt: name="universal-ctags" state=present
     become: true
 
   - name: ensure ctags directory exists
     file:
-      path: "{{ git_template_directory }}/hooks"
+      path: "{{ ansible_env.HOME }}/.ctags.d"
       state: directory
 
   - name: Copy ctags rules

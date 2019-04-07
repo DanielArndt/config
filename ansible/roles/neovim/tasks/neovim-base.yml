@@ -6,8 +6,8 @@
     - "{{ required_packages }}"
   become: true
 
-- block: 
-    - name: Add neovim ppa 
+- block:
+    - name: Add neovim ppa
       apt_repository: repo="{{ neovim_ppa }}" state=present
       when: ansible_os_family == "Debian"
 
