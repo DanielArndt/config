@@ -1,15 +1,11 @@
 # Without this, tmux will eat the colours!
 export TERM=screen-256color
 
-if [[ -e $HOME/.secrets ]]; then
-    source $HOME/.secrets
-fi
-
 # Prevent zsh from renaming my terminals
 export DISABLE_AUTO_TITLE=true
 
 export GOPATH=$HOME/go
-export PATH=$HOME/.local/bin:$GOPATH/bin:$HOME/bin:/usr/local/go/bin:$PATH
+export PATH=$HOME/.cargo/bin:$HOME/.local/bin:$GOPATH/bin:$HOME/bin:/usr/local/go/bin:$PATH
 export HOSTNAME=$(hostname)
 
 source ~/.zsh/antigen/antigen.zsh
@@ -41,7 +37,6 @@ eval $(thefuck --alias)
 export WORKON_HOME=$HOME/.virtualenvs
 export PIP_VIRTUALENV_BASE=WORKON_HOME
 export PIP_REQUIRE_VIRTUALENV=true
-export PIP_USER='yes' # Install at user level by default
 
 function which_skip_alias {
     # Ignore alias -- trying to find the binary
@@ -49,22 +44,17 @@ function which_skip_alias {
 }
 export SYSTEM_PIP=`which_skip_alias pip`
 function syspip {
-    PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP "$@"
+    PIP_USER='yes' PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP "$@"
 }
 export SYSTEM_PIP3=`which_skip_alias pip3`
 function syspip3 {
-    PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP3 "$@"
+    PIP_USER='yes' PIP_REQUIRE_VIRTUALENV="" $SYSTEM_PIP3 "$@"
 }
 export EDITOR="nvim"
 
 # Don't let me freeze the terminal with ctrl-s.
 # It's annoying and I'm fairly certain never useful these days.
 stty -ixon
-
-if [[ -e $HOME/.local/bin/virtualenvwrapper.sh ]]; then
-    export VIRTUALENVWRAPPER_PYTHON=`which_skip_alias python3`
-    source $HOME/.local/bin/virtualenvwrapper.sh
-fi
 
 # Vim Pager
 if hash vimpager 2>/dev/null; then
@@ -80,7 +70,7 @@ export PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 
-# Insert all matches with C-x C-a
+# Insert all matches with C-x C-x
 zle -C all-matches complete-word _my_generic
 zstyle ':completion:all-matches::::' completer _all_matches
 zstyle ':completion:all-matches:*' old-matches only
@@ -96,3 +86,11 @@ bindkey '^X^X' all-matches
 
 # Auto start ssh-agent
 eval `keychain --eval 2>/dev/null`
+
+if [[ -e $HOME/.secrets ]]; then
+    source $HOME/.secrets
+fi
+
+if [[ -e $HOME/.local_zsh_rc ]]; then
+    source $HOME/.local_zsh_rc
+fi
