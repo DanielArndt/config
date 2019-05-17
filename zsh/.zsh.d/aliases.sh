@@ -23,14 +23,7 @@ fi
 # Only set git aliases if git exists
 if hash git 2>/dev/null; then
     # Git aliases
-    # Use hub if it exists
-    if hash hub 2>/dev/null; then
-        alias g="hub"
-        alias git="hub"
-        compdef hub=git
-    else
-        alias g="git"
-    fi
+    alias g="git"
 
     alias gb="git branch"
     alias gd="git diff"
