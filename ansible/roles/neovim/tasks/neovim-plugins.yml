@@ -3,10 +3,10 @@
 # YouCompleteMe
 - block:
   - name: Install YouCompleteMe dependencies
-    apt: name={{ item }} state=present
+    apt:
+        name: "{{ ycm_packages }}"
+        state: present
     become: true
-    with_items:
-      - "{{ ycm_packages }}"
 
   - name: Install YouCompleteMe python modules
     pip:

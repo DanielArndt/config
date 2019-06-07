@@ -19,5 +19,3 @@ ycm_packages:
     - python-dev
     - python3-dev
     - libclang-dev
-      #
-      #ycm_build_dir: "{{ ansible_env.HOME }}/.ycm_build"

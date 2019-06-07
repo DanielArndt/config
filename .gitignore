@@ -4,3 +4,4 @@ zsh/antigen/
 error.log
 *.retry
 *.swp
+test/vagrant/*.log
