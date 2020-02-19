@@ -33,6 +33,7 @@ if hash git 2>/dev/null; then
     alias glp="git lp"
     alias gst="git status -sb"
     alias gc!="git commit --amend --reset-author"
+    unalias grhh
 
     function ghra {
         python3 ~/config/zsh/github.py remote add $@
