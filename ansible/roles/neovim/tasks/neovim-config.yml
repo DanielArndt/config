@@ -4,6 +4,7 @@
   git:
     repo: "https://github.com/DanielArndt/vim-config.git"
     dest: "{{ vim_runtime_dir }}"
+    update: no
 
 - name: Copy vimrc
   template:
@@ -20,3 +21,11 @@
     src: "{{ ansible_env.HOME }}/.vimrc"
     dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
     state: link
+    force: yes
+
+- name: Set up nvim virtualenv
+  pip:
+    name: pynvim
+    virtualenv: "{{ ansible_env.HOME }}/.virtualenvs/nvim"
+    state: present
+    virtualenv_python: python3

@@ -4,17 +4,17 @@ import argparse
 import os
 import shlex
 import subprocess
-from datetime import datetime
-from os.path import exists
+import logging
 from distutils.spawn import find_executable
 
 HOME = os.path.expanduser('~')
 try:
     SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-except:
+except Exception:
     SCRIPT_DIR = HOME + "/config/"
 
 interactive = True
+
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='Setup a custom environment.')
@@ -23,7 +23,8 @@ def get_arguments():
     parser.add_argument('--skip-tags', help='Run without these tags')
     parser.add_argument('--non-interactive', help="Don't ask questions, just accept the default.", action="store_true")
     parser.add_argument('--diff', help='Show changes', action="store_true")
-    parser.add_argument('--check', help="Dry run.", action="store_true")
+    parser.add_argument('--install', help="Preform the install.", action="store_true")
+    parser.add_argument('--verbose', help="Set log level to debug", action="store_true")
     return parser.parse_args()
 
 
@@ -51,6 +52,7 @@ def ask(question, default=None):
 
 
 def shell_call(command_str, cwd=HOME, raise_exception=True, **kwargs):
+    logging.debug(f"shell command: {command_str}")
     cmd = shlex.split(command_str)
     ret_code = subprocess.call(cmd, cwd=cwd, **kwargs)
     if ret_code != 0 and raise_exception:
@@ -59,10 +61,7 @@ def shell_call(command_str, cwd=HOME, raise_exception=True, **kwargs):
 
 
 def install_debian(package_name):
-    if interactive:
-        shell_call('sudo apt-get install {}'.format(package_name))
-    else:
-        shell_call('sudo apt-get install -y {}'.format(package_name))
+    shell_call('sudo apt-get install -y {}'.format(package_name))
 
 
 def install_pip(package_name):
@@ -89,7 +88,7 @@ def install_ansible():
 
     initialize_apt()
     install_debian('python3-pip')
-    shell_call('pip3 install  --user -U pip setuptools cryptography')
+    shell_call('python3 -m pip install --user -U pip setuptools cryptography')
     # Pip is updated now, which may break the default debian script. Pass the
     # right path so that it uses the right pip init script.
     env = os.environ
@@ -112,7 +111,7 @@ def get_opt_str(args):
         opts += ' --tags ' + args.tags
     if args.skip_tags:
         opts += ' --skip-tags ' + args.skip_tags
-    if args.check:
+    if not args.install:
         opts += ' --check'
     return opts
 
@@ -137,7 +136,6 @@ def install_all_roles(args):
     )
 
 
-
 def install_all(args):
     install_ansible()
     if args.role:
@@ -150,6 +148,8 @@ def install_all(args):
 
 if __name__ == "__main__":
     args = get_arguments()
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
     if args.non_interactive:
         interactive = False
     if not ask("This script only works on Debian / Ubuntu. Would you like to continue?",
