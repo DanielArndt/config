@@ -39,6 +39,10 @@ if hash git 2>/dev/null; then
         python3 ~/config/zsh/github.py remote add $@
     }
 
+    function gcbm {
+        python3 ~/config/zsh/git.py branch-from upstream/master $@
+    }
+
     function gmod {
         local _path=$(git rev-parse --show-toplevel || pwd)
         local _files=
